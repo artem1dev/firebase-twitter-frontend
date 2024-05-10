@@ -14,12 +14,8 @@ export class UserRepository {
         this.userStore = this.firestore.collection("users");
     }
 
-    async create(user: CreateUser) {
-        return await this.userStore.doc(user.uid).set(user);
-    }
-
-    async getOne(uid: string) {
-        const doc = await this.userStore.doc(uid).get();
+    async getOne(userId: string) {
+        const doc = await this.userStore.doc(userId).get();
         if (!doc.exists) {
             console.log("No such document!");
         } else {
@@ -28,7 +24,7 @@ export class UserRepository {
     }
 
     async getMany() {
-        const snapshot = await this.userStore.limit(10).get();
+        const snapshot = await this.userStore.get();
         if (snapshot.empty) {
             return [];
         }
@@ -39,6 +35,9 @@ export class UserRepository {
         return result;
     }
 
+    async create(user: CreateUser) {
+        return await this.userStore.doc(user.userId).set(user);
+    }
     // async update(uid: string, user: UpdateUser) {
     //     return await this.userStore.doc(uid).update(user);
     // }

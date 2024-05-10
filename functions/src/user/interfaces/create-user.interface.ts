@@ -1,5 +1,5 @@
 export class CreateUser {
-    uid: string;
+    userId: string;
     email: string;
     name: string;
     lastname: string;

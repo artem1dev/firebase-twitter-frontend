@@ -4,10 +4,10 @@ import { UserRepository } from "./user.repository";
 @Injectable()
 export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
-    
+
     async create(user: any) {
         const userProfile = {
-            uid: user.uid,
+            userId: user.userId,
             email: user.email,
             name: user.name,
             lastname: user.lastname,
