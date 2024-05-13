@@ -21,7 +21,7 @@ export class UserRepository {
 
     async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
         const snapshot = await this.userStore.get();
-        return snapshot.empty ? [] : snapshot.docs.map(doc => doc.data());
+        return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 
     async create(user: CreateUser): Promise<void> {

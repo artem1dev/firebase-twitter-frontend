@@ -7,7 +7,7 @@ import { UserService } from "src/user/user.service";
 @Injectable()
 export class AuthService {
     private firebaseAuth: Auth;
-    
+
     constructor(
         private readonly firebaseService: FirebaseService,
         private readonly userService: UserService,

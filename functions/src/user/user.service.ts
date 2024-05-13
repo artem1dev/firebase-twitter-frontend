@@ -7,21 +7,21 @@ import { UpdateUser } from "./interfaces/update-user.interface";
 export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async createUser(user: CreateUser) {
-        await this.userRepository.create(user);
-        return { isAuth: true, user: user };
+    async getAllUsers() {
+        return await this.userRepository.getAll();
     }
 
     async getUserById(userId: string) {
         const user = await this.userRepository.getOne(userId);
         if (!user) {
-            throw new Error('User not found');
+            throw new Error("User not found");
         }
         return user;
     }
 
-    async getAllUsers() {
-        return await this.userRepository.getAll();
+    async createUser(user: CreateUser) {
+        await this.userRepository.create(user);
+        return { isAuth: true, user: user };
     }
 
     async updateUser(userId: string, user: UpdateUser) {
