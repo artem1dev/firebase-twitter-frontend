@@ -10,7 +10,7 @@ import { getFirestore } from "firebase-admin/firestore";
 export class FirebaseService {
     private readonly app;
 
-    constructor(@Inject("CONFIG_OPTIONS") firebaseConfig: FirebaseOptions) {
+    constructor(@Inject("CONFIG_OPTIONS") private firebaseConfig: FirebaseOptions) {
         this.app = admin.initializeApp(functions.config().firebase);
     }
 

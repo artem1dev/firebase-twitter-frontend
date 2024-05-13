@@ -3,7 +3,7 @@ import { CommentRepository } from "./comment.repository";
 
 @Injectable()
 export class CommentService {
-    constructor(private readonly commentService: CommentService) {}
+    constructor(private readonly commentRepository: CommentRepository) {}
 
     async create(comment: any) {
 

@@ -3,7 +3,7 @@ import { FirebaseOptions } from "firebase/app";
 const { API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID } = process.env;
 
 export default registerAs(
-    "firebase.config",
+    "firebaseConfig",
     (): FirebaseOptions => ({
         apiKey: API_KEY,
         authDomain: AUTH_DOMAIN,

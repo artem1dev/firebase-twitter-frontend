@@ -1,20 +1,36 @@
 import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
+import { CreateUser } from "./interfaces/create-user.interface";
+import { UpdateUser } from "./interfaces/update-user.interface";
 
 @Injectable()
 export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async create(user: any) {
-        const userProfile = {
-            userId: user.userId,
-            email: user.email,
-            name: user.name,
-            lastname: user.lastname,
-            role: 1,
-        };
-        await this.userRepository.create(userProfile);
+    async createUser(user: CreateUser) {
+        await this.userRepository.create(user);
+        return { isAuth: true, user: user };
+    }
 
-        return { isAuth: true, user: userProfile };
+    async getUserById(userId: string) {
+        const user = await this.userRepository.getOne(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user;
+    }
+
+    async getAllUsers() {
+        return await this.userRepository.getAll();
+    }
+
+    async updateUser(userId: string, user: UpdateUser) {
+        await this.userRepository.update(userId, user);
+        return { updated: true };
+    }
+
+    async deleteUser(userId: string) {
+        await this.userRepository.delete(userId);
+        return { deleted: true };
     }
 }

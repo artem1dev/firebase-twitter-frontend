@@ -14,31 +14,25 @@ export class UserRepository {
         this.userStore = this.firestore.collection("users");
     }
 
-    async getOne(userId: string) {
+    async getOne(userId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const doc = await this.userStore.doc(userId).get();
-        if (!doc.exists) {
-            console.log("No such document!");
-        } else {
-            return doc.data();
-        }
+        return doc.exists ? doc.data() : undefined;
     }
 
-    async getMany() {
+    async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
         const snapshot = await this.userStore.get();
-        if (snapshot.empty) {
-            return [];
-        }
-        const result = [];
-        snapshot.forEach((doc) => {
-            result.push(doc.data());
-        });
-        return result;
+        return snapshot.empty ? [] : snapshot.docs.map(doc => doc.data());
     }
 
-    async create(user: CreateUser) {
-        return await this.userStore.doc(user.userId).set(user);
+    async create(user: CreateUser): Promise<void> {
+        await this.userStore.doc(user.userId).set(user);
     }
-    // async update(uid: string, user: UpdateUser) {
-    //     return await this.userStore.doc(uid).update(user);
-    // }
+
+    async update(userId: string, user: UpdateUser): Promise<void> {
+        await this.userStore.doc(userId).update(user);
+    }
+
+    async delete(userId: string): Promise<void> {
+        await this.userStore.doc(userId).delete();
+    }
 }

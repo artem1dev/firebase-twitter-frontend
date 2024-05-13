@@ -1,4 +1,6 @@
-import { OmitType, PartialType } from "@nestjs/mapped-types";
-import { CreateUser } from "./create-user.interface";
-
-export class UpdateUser extends PartialType(OmitType(CreateUser, ["userId"] as const)) {}
+export interface UpdateUser {
+    [key: string]: any; 
+    email?: string;
+    name?: string;
+    lastname?: string;
+}

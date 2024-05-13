@@ -7,13 +7,13 @@ import { Module, DynamicModule } from "@nestjs/common";
     exports: [FirebaseService],
 })
 export class FirebaseModule {
-    static forRoot(options: FirebaseOptions): DynamicModule {
+    static forRoot(firebaseConfig: FirebaseOptions): DynamicModule {
         return {
             module: FirebaseModule,
             providers: [
                 {
                     provide: "CONFIG_OPTIONS",
-                    useValue: options,
+                    useValue: firebaseConfig,
                 },
                 FirebaseService,
             ],

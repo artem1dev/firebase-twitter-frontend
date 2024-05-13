@@ -7,19 +7,21 @@ import { UserService } from "src/user/user.service";
 @Injectable()
 export class AuthService {
     private firebaseAuth: Auth;
+    
     constructor(
         private readonly firebaseService: FirebaseService,
         private readonly userService: UserService,
     ) {}
+
     async createUser(createAuthDto: RegisterDto) {
         const { user } = await this.firebaseService.createUserWithEmailAndPassword(createAuthDto);
         const userProfile = {
-            uid: user.uid,
+            userId: user.uid,
             email: createAuthDto.email,
             name: createAuthDto.name,
             lastname: createAuthDto.lastname,
         };
-        this.userService.create(userProfile);
+        this.userService.createUser(userProfile);
         return { isAuth: true, user: { user, userProfile } };
     }
 
