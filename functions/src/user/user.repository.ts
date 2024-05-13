@@ -21,6 +21,7 @@ export class UserRepository {
 
     async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
         const snapshot = await this.userStore.get();
+        console.log(snapshot)
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 

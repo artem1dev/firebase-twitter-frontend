@@ -1,3 +1,4 @@
+import { FirebaseOptions } from "firebase/app";
 import { FirebaseService } from "./firebase.service";
 import { Module, DynamicModule } from "@nestjs/common";
 

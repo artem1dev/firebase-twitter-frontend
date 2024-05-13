@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Inject, Injectable } from "@nestjs/common";
 import { FirebaseOptions } from "firebase/app";
 
@@ -5,17 +6,19 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth } f
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import { getFirestore } from "firebase-admin/firestore";
-
 @Injectable()
 export class FirebaseService {
     private readonly app;
 
-    // @Inject('CONFIG_OPTIONS') firebaseConfig: FirebaseOptions
     constructor() {
         if (!admin.apps.length) {
-            this.app = admin.initializeApp(functions.config().firebase);
+            this.app = admin.initializeApp({
+                credential:  admin.credential.cert(process.env.SERVICE_ACCOUNT_PATH),
+                databaseURL: `https://${process.env.PROJECT_ID}.firebaseio.com`
+            });
+        } else {
+            this.app = admin.apps[0];
         }
-        this.app = admin.apps[0];
     }
 
     getApp() {
@@ -33,7 +36,7 @@ export class FirebaseService {
     async createUserWithEmailAndPassword({ email, password }: { email: string; password: string }) {
         return await createUserWithEmailAndPassword(getAuth(), email, password);
     }
-
+    
     async signInWithEmailAndPassword({ email, password }: { email: string; password: string }) {
         return await signInWithEmailAndPassword(getAuth(), email, password);
     }
