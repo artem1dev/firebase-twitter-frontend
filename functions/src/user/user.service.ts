@@ -12,7 +12,7 @@ export class UserService {
     }
 
     async getUserById(userId: string) {
-        const user = await this.userRepository.getOne(userId);
+        const user = await this.userRepository.getOneByID(userId);
         if (!user) {
             throw new Error("User not found");
         }

@@ -1,14 +1,19 @@
-import { Module } from "@nestjs/common";
-import { AuthController } from "./auth.controller";
-import { AuthService } from "./auth.service";
-import { FirebaseModule } from "src/firebase/firebase.module";
-import { UserModule } from "src/user/user.module";
-import { UserService } from "src/user/user.service";
-import { UserRepository } from "src/user/user.repository";
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { UserService } from 'src/user/user.service';
+import { FirebaseService } from 'src/firebase/firebase.service';
+import { UserRepository } from 'src/user/user.repository';
+import { JwtModule } from '@nestjs/jwt';
+import authJwtConfig from '../config/jwt.config';
 
 @Module({
-    imports: [FirebaseModule, UserModule],
+    imports: [
+        JwtModule.registerAsync({
+            useFactory: authJwtConfig,
+        }),
+    ],
     controllers: [AuthController],
-    providers: [AuthService, UserService, UserRepository],
+    providers: [AuthService, UserService, FirebaseService, UserRepository],
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -24,8 +24,8 @@ export class PostRepository {
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 
-    async create(post: CreatePost): Promise<void> {
-        await this.postStore.doc(post.postId).set(post);
+    async create(post: CreatePost) {
+        return await this.postStore.add(post);
     }
 
     async update(postId: string, post: UpdatePost): Promise<void> {

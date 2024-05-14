@@ -14,14 +14,14 @@ export class UserRepository {
         this.userStore = this.firestore.collection("users");
     }
 
-    async getOne(userId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
+    async getOneByID(userId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const doc = await this.userStore.doc(userId).get();
         return doc.exists ? doc.data() : undefined;
     }
 
     async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
         const snapshot = await this.userStore.get();
-        console.log(snapshot)
+        console.log(snapshot);
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 
