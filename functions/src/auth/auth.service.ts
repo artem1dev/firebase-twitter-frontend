@@ -16,17 +16,19 @@ export class AuthService {
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
     ) { }
-    public getTokenForUser(user: User): string {
+
+    public getTokenForUser(email: string, uid: string): string {
         return this.jwtService.sign({
-            email: user.email,
-            sub: user.uid,
+            email: email,
+            sub: uid,
         });
     }
 
     async createUser(createAuthDto: RegisterDto) {
-        const { user } = await this.firebaseService.createUserWithEmailAndPassword(
+        const user = await this.firebaseService.createUserWithEmailAndPassword(
             createAuthDto,
         );
+        console.log(user)
         const userProfile = {
             userId: user.uid,
             email: createAuthDto.email,
@@ -36,8 +38,8 @@ export class AuthService {
         await this.userService.createUser(userProfile);
         return {
             userId: user.uid,
-            token: this.getTokenForUser(user),
-        };
+            token: this.getTokenForUser(createAuthDto.email, user.uid),
+        }; 
     }
 
     async signIn(createAuthDto: LoginDto) {

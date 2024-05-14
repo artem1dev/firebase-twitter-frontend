@@ -24,8 +24,8 @@ export class CommentRepository {
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 
-    async create(comment: CreateComment): Promise<void> {
-        await this.commentStore.doc(comment.commentId).set(comment);
+    async create(comment: CreateComment) {
+        return await this.commentStore.add(comment);
     }
 
     async update(commentId: string, comment: UpdateComment): Promise<void> {

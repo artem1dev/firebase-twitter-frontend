@@ -19,7 +19,7 @@ export class AuthController {
         description: "Registered",
         type: ResponseAuthDto,
     })
-    register(@Body() registerDto: RegisterDto): Promise<ResponseAuthDto> {
+    register(@Body() registerDto: RegisterDto) {
         return this.authService.createUser(registerDto);
     }
 
@@ -32,7 +32,7 @@ export class AuthController {
     login(@Body() loginDto: LoginDto, @CurrentUser() user) {
         return {
             userId: user.id,
-            token: this.authService.getTokenForUser(user),
+            token: this.authService.getTokenForUser(user.email, user.id),
         };
     }
 }

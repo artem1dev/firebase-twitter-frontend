@@ -26,7 +26,7 @@ export class FirebaseService {
     }
 
     getAuth() {
-        return getAuth(this.app);
+        return admin.auth(this.app);
     }
 
     getFirestore() {
@@ -34,7 +34,11 @@ export class FirebaseService {
     }
 
     async createUserWithEmailAndPassword({ email, password }: { email: string; password: string }) {
-        return await createUserWithEmailAndPassword(getAuth(), email, password);
+        const userRecord = await this.getAuth().createUser({
+            email,
+            password
+        });
+        return userRecord;
     }
 
     async signInWithEmailAndPassword({ email, password }: { email: string; password: string }) {

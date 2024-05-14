@@ -1,5 +1,5 @@
 export class CreateComment {
-    commentId: string;
+    content: string;
     postId: string;
     userId: string;
 }

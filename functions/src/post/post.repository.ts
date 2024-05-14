@@ -25,7 +25,11 @@ export class PostRepository {
     }
 
     async create(post: CreatePost) {
-        return await this.postStore.add(post);
+        const newPost = {
+            ...post,
+            createdAt: new Date(),
+        };
+        return await this.postStore.add(newPost);
     }
 
     async update(postId: string, post: UpdatePost): Promise<void> {
