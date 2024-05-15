@@ -1,0 +1,163 @@
+.FullPostBlock{
+    width: 96%;
+    margin-left: 2%;
+    margin-top: 2%;
+    border-radius: 20px;
+    background-color: #414141;
+    padding: 2%; 
+}
+
+.FullPostContent{
+    border-radius: 20px;
+    padding: 4%;
+    background-color: #313131;
+    color: cornsilk;
+}
+
+.EditPostForm{
+    border-radius: 20px;
+    padding: 2%;
+    background-color: #414141;
+    color: cornsilk;
+    width: 40%;
+}
+
+.edit_content{
+    padding: 2%;
+    height: 200px;
+    border-radius: 20px;
+    width:100%;
+}
+
+.EditPostBtnBlock{
+    padding-top: 2%;
+    display: flex;
+    justify-content: space-around;
+}
+
+h1 .FullPostTitle{
+    text-align: center;
+}
+
+.EditPost_btn{
+    background-color: #CA3E47; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 5px 25px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.EditPost_btn:hover{ 
+    background-color: cornsilk; 
+    color: #081F2D; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
+.SaveEdit_btn{
+    background-color: #5aca3e; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 5px 25px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.SaveEdit_btn:hover{ 
+    background-color: cornsilk; 
+    color: #081F2D; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
+.CancelEdit_btn{
+    background-color: #663eca; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 5px 25px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.CancelEdit_btn:hover{ 
+    background-color: cornsilk; 
+    color: #081F2D; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
+.CreateCommentPostForm{
+    border-radius: 20px;
+    padding: 1%;
+    background-color: #414141;
+    color: cornsilk;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.CommentInput{
+    padding: 2%;
+    height: 55px;
+    border-radius: 20px;
+    width:100%;
+}
+
+.CommentBtnBlock{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.PostComment_btn{
+    background-color: #5aca3e; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 5px 25px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.PostComment_btn:hover{ 
+    background-color: cornsilk; 
+    color: #081F2D; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
+
+.PostComment_btn:disabled{
+    background-color: #414141; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    transition: 0.3s; 
+}
+
+.Comment_Block{
+    margin-top: 2%;
+    border-radius: 20px;
+    padding: 1%;
+    background-color: #414141;
+    color: cornsilk;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Comment_Header{
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,0 +1,62 @@
+.menu-bar {
+    background-color: #313131;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.group {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.itemF {
+    color: white;
+    background-color: #CA3E47;
+    font-size: 18px;
+	font-family: AlpaRenote;
+	letter-spacing: 0.02in;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 14px 40px;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.itemP {
+    color: white;
+    background-color: #5aca3e;
+    font-size: 18px; 
+	font-family: AlpaRenote;
+	letter-spacing: 0.02in;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 14px 40px;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.item {
+    color: white;
+    background-color: transparent;
+    font-size: 18px;
+	font-family: AlpaRenote;
+	letter-spacing: 0.02in;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 14px 55px;
+	font-weight: 600;
+}
+  
+.item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.itemF:hover {
+    background-color: #992c33;
+}
+
+.itemP:hover {
+    background-color: #469d30;
+}

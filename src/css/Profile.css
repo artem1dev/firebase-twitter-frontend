@@ -1,0 +1,55 @@
+.divProfileBlock {
+    width: 40%;
+    margin-left: 30%;
+    margin-top: 7%;
+    border-radius: 20px;
+    background-color: #414141;
+    padding: 2%;
+}
+
+.ProfileForm {
+    letter-spacing: 0.02in;
+    vertical-align: middle;
+    border-radius: 20px;
+    padding: 4%;
+    background-color: #313131;
+    color: cornsilk;
+}
+
+.top-block{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.profimg{
+    border-radius: 50%;
+    height:128px;
+}
+
+.Edit_btn{
+    background-color: #CA3E47; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 10px 25px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.Edit_btn:hover{ 
+    background-color: cornsilk; 
+    color: #081F2D; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
+.roleTitle{
+    font-size: 0.2in;
+    color: gold; 
+}
+.profileitem{
+    padding: 10px;
+}

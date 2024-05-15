@@ -1,0 +1,66 @@
+@font-face {
+    font-family: Pacifico;
+    src: url("../assets/fonts/Pacifico.ttf");
+}
+
+@font-face {
+    font-family: AlpaRenote;
+    src: url("../assets/fonts/AlpaRenote.otf");
+}
+
+.divFormBlock {
+    width: 40%;
+    margin-left: 30%;
+    margin-top: 7%;
+    border-radius: 20px;
+    background-color: #414141;
+    padding: 2%;
+}
+
+.divFormBlock h1{
+    font-family: Pacifico;
+    text-align: center;
+}
+
+.Main_Form {
+    font-family: AlpaRenote;
+    letter-spacing: 0.02in;
+    vertical-align: middle;
+    border-radius: 20px;
+    padding: 4%;
+    background-color: #313131;
+    color: cornsilk;
+}
+
+.Submit_btn{
+    background-color: #CA3E47; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: cornsilk; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 10px 45px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.Submit_btn:hover{ 
+    background-color: cornsilk; 
+    color: #081F2D; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
+.Errors
+{
+    color: red;
+}
+
+.inputField
+{
+    color: #313131;
+    font-family: AlpaRenote;
+    border-radius: 20px;
+    width: 45%;
+    padding: 2%;
+}

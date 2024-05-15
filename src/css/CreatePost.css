@@ -1,0 +1,36 @@
+.CreatePostBlock{
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 7%;
+    border-radius: 20px;
+    background-color: #414141;
+    padding: 2%;
+}
+
+.CreatePostForm{
+    letter-spacing: 0.02in;
+    vertical-align: middle;
+    border-radius: 20px;
+    padding: 4%;
+    background-color: #313131;
+    color: cornsilk;
+}
+
+.titleInput{
+    padding: 1%;
+    border-radius: 20px;
+    width: 30%;
+}
+
+.contentInput{
+    padding: 1%;
+    border-radius: 20px;
+    height: 200px;
+    width: 50%;
+}
+
+.categoryInput{
+    color: black;
+    border-radius: 20px;
+    width: 30%;
+}

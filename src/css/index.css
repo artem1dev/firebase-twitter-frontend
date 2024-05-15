@@ -1,0 +1,23 @@
+body {
+	margin: 0;
+	background-color: #525252;
+}
+
+.All_Posts {
+	display: flex;
+  	flex-flow: wrap;
+	/* justify-content: space-between; */
+	height: 100%;
+	width: 100%;
+}
+
+.PostBlock{
+	width: 30%;
+	position: relative;
+    margin-left: 2%;
+    margin-top: 2%;
+    border-radius: 20px;
+    background-color: #414141;
+    padding: 2%; 
+}
+
