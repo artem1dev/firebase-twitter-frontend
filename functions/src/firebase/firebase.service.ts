@@ -1,14 +1,22 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Inject, Injectable } from "@nestjs/common";
-import { FirebaseOptions } from "firebase/app";
+import { Injectable } from "@nestjs/common";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
+import * as admin from 'firebase-admin';
+import { App } from 'firebase-admin/app';
+import { Auth, getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
+import {
+    signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { FirebaseApp } from 'firebase/app';
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
-import { getFirestore } from "firebase-admin/firestore";
 @Injectable()
 export class FirebaseService {
     private readonly app;
+    private readonly firebase: FirebaseApp;
 
     constructor() {
         if (!admin.apps.length) {
@@ -19,6 +27,15 @@ export class FirebaseService {
         } else {
             this.app = admin.apps[0];
         }
+        this.firebase = firebase.initializeApp({
+            apiKey: process.env.API_KEY, 
+            authDomain: process.env.AUTH_DOMAIN,
+            projectId: process.env.PROJECT_ID,
+            storageBucket: process.env.STORAGE_BUCKET,
+            messagingSenderId: process.env.MESSAGING_SENDER_ID,
+            appId: process.env.APP_ID,
+            measurementId: process.env.MEASUREMENT_ID,
+        });
     }
 
     getApp() {
@@ -42,6 +59,11 @@ export class FirebaseService {
     }
 
     async signInWithEmailAndPassword({ email, password }: { email: string; password: string }) {
-        return await signInWithEmailAndPassword(getAuth(), email, password);
+        try {
+            return (await firebase.auth().signInWithEmailAndPassword(email, password)).user;
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
+ 
