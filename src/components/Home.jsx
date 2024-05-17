@@ -8,7 +8,7 @@ export default function Home() {
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await axios.get(routes.allPost());
-            return response.data.values;
+            return response.data;
         };
         fetchPosts().then((data) => {
             setPosts(data);

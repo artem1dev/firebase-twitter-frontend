@@ -16,7 +16,7 @@ export default function FullPost() {
     useEffect(() => {
         const fetchInfoPost = async (postId) => {
             const response = await axios.get(routes.getPostsById(postId));
-            return response.data.values;
+            return response.data;
         };
         fetchInfoPost(postId).then((data) => {
             setPosts(data);

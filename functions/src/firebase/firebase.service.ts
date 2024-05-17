@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable } from "@nestjs/common";
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import 'firebase/compat/storage';
-import * as admin from 'firebase-admin';
-import { App } from 'firebase-admin/app';
-import { Auth, getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
-import {
-    signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { FirebaseApp } from 'firebase/app';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/storage";
+import * as admin from "firebase-admin";
+import { App } from "firebase-admin/app";
+import { Auth, getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseApp } from "firebase/app";
 
 @Injectable()
 export class FirebaseService {
@@ -28,7 +26,7 @@ export class FirebaseService {
             this.app = admin.apps[0];
         }
         this.firebase = firebase.initializeApp({
-            apiKey: process.env.API_KEY, 
+            apiKey: process.env.API_KEY,
             authDomain: process.env.AUTH_DOMAIN,
             projectId: process.env.PROJECT_ID,
             storageBucket: process.env.STORAGE_BUCKET,
@@ -53,7 +51,7 @@ export class FirebaseService {
     async createUserWithEmailAndPassword({ email, password }: { email: string; password: string }) {
         const userRecord = await this.getAuth().createUser({
             email,
-            password
+            password,
         });
         return userRecord;
     }
@@ -62,8 +60,7 @@ export class FirebaseService {
         try {
             return (await firebase.auth().signInWithEmailAndPassword(email, password)).user;
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 }
- 

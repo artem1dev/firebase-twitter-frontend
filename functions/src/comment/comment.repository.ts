@@ -14,13 +14,18 @@ export class CommentRepository {
         this.commentStore = this.firestore.collection("comments");
     }
 
+    async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
+        const snapshot = await this.commentStore.get();
+        return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
+    }
+
     async getOne(commentId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const doc = await this.commentStore.doc(commentId).get();
         return doc.exists ? doc.data() : undefined;
     }
 
-    async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
-        const snapshot = await this.commentStore.get();
+    async getAllByPostId(postId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
+        const snapshot = await this.commentStore.where('postId', '==', postId).get();
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 

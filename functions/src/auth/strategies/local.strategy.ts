@@ -7,7 +7,7 @@ import { UserRepository } from "src/user/user.repository";
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "local") {
     private readonly logger = new Logger(LocalStrategy.name);
-    
+
     constructor(
         private readonly firebaseService: FirebaseService,
         private readonly userRepository: UserRepository,

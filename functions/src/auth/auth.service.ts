@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Auth } from 'firebase-admin/auth';
-import { User } from 'firebase/auth';
-import { FirebaseService } from 'src/firebase/firebase.service';
-import { UserService } from 'src/user/user.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { Auth } from "firebase-admin/auth";
+import { User } from "firebase/auth";
+import { FirebaseService } from "src/firebase/firebase.service";
+import { UserService } from "src/user/user.service";
+import { LoginDto } from "./dto/login.dto";
+import { RegisterDto } from "./dto/register.dto";
 
 @Injectable()
 export class AuthService {
@@ -15,7 +15,7 @@ export class AuthService {
         private readonly firebaseService: FirebaseService,
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
-    ) { }
+    ) {}
 
     public getTokenForUser(email: string, uid: string): string {
         return this.jwtService.sign({
@@ -25,10 +25,8 @@ export class AuthService {
     }
 
     async createUser(createAuthDto: RegisterDto) {
-        const user = await this.firebaseService.createUserWithEmailAndPassword(
-            createAuthDto,
-        );
-        console.log(user)
+        const user = await this.firebaseService.createUserWithEmailAndPassword(createAuthDto);
+        console.log(user);
         const userProfile = {
             userId: user.uid,
             email: createAuthDto.email,
@@ -39,14 +37,12 @@ export class AuthService {
         return {
             userId: user.uid,
             token: this.getTokenForUser(createAuthDto.email, user.uid),
-        }; 
+        };
     }
 
     async signIn(createAuthDto: LoginDto) {
-        const user = await this.firebaseService.signInWithEmailAndPassword(
-            createAuthDto,
-        );
-        if(!user) {
+        const user = await this.firebaseService.signInWithEmailAndPassword(createAuthDto);
+        if (!user) {
             return "invalid creds";
         }
         return {

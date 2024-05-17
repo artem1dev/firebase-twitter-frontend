@@ -38,7 +38,7 @@ export default function Post({ post }) {
                             <h5>{post?.title}</h5>
                         </div>
                         <p>
-                            By <a href={`/profile/${post?.userId}`}>{post?.authorLogin + " "}</a>
+                            By <a href={`/profile/${post?.userId}`}>{post?.authorName + " " + post?.authorLastName + " "}</a>
                         </p>
                     </div>
                     <div>
@@ -66,7 +66,7 @@ export default function Post({ post }) {
                         </div>
                         <br />
                         <div>
-                            <a href={`/post/${post?._id}`}>
+                            <a href={`/post/${post?.id}`}>
                                 <button type="submit" className="Submit_btn">
                                     Reading
                                 </button>

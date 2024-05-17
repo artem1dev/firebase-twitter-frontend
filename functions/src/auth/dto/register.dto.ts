@@ -18,7 +18,7 @@ export class RegisterDto {
         type: String,
     })
     lastName: string;
-    
+
     @ApiProperty({
         example: "Bombas1234",
         type: String,

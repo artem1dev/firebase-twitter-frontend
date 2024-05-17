@@ -14,15 +14,22 @@ export class UserRepository {
         this.userStore = this.firestore.collection("users");
     }
 
-    async getOneByID(userId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
-        const doc = await this.userStore.doc(userId).get();
-        return doc.exists ? doc.data() : undefined;
-    }
-
     async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
         const snapshot = await this.userStore.get();
-        console.log(snapshot);
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
+    }
+
+    async getOneByID(userId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
+        try {
+            console.log("Fetching user with ID:", userId);
+            if (!userId || typeof userId !== "string" || userId.trim() === "") {
+                throw new Error("Invalid or empty userId provided");
+            }
+            const doc = await this.userStore.doc(userId).get();
+            return doc.exists ? doc.data() : undefined;
+        } catch (error) {
+            return error;
+        }
     }
 
     async create(user: CreateUser): Promise<void> {
