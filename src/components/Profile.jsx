@@ -46,7 +46,7 @@ export default function Profile() {
                                 </div>
                             </div>
                         </div>
-                        {currentUser.userData.userId === id ? (
+                        {currentUser.userId === id ? (
                             <button onClick={async () => {
                                     const response = await axios.delete(
                                         routes.deleteUserById(id),

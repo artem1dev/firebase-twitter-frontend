@@ -31,7 +31,7 @@ export default (props) => {
                     {isLogin ? (
                         <>
                             <div className="group1">
-                                <Link to={`/profile/${currentUser.userData.userId}`} className="item">
+                                <Link to={`/profile/${currentUser?.userId}`} className="item">
                                     Profile
                                 </Link>
                             </div>

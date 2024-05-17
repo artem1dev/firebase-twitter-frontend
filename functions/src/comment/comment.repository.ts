@@ -16,16 +16,36 @@ export class CommentRepository {
 
     async getAll(): Promise<FirebaseFirestore.DocumentData[]> {
         const snapshot = await this.commentStore.get();
-        return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
+        return snapshot.empty
+            ? []
+            : snapshot.docs.map((doc) => ({
+                  id: doc.id, // Include the document ID
+                  ...doc.data(), // Include all the document data
+              }));
     }
 
     async getOne(commentId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const doc = await this.commentStore.doc(commentId).get();
-        return doc.exists ? doc.data() : undefined;
+        return doc.exists
+            ? {
+                  id: doc.id, // Include the document ID
+                  ...doc.data(), // Include all the document data
+              }
+            : undefined;
     }
 
-    async getAllByPostId(postId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
-        const snapshot = await this.commentStore.where('postId', '==', postId).get();
+    async getAllByPostId(postId: string): Promise<FirebaseFirestore.DocumentData[]> {
+        const snapshot = await this.commentStore.where("postId", "==", postId).get();
+        return snapshot.empty
+            ? []
+            : snapshot.docs.map((doc) => ({
+                  id: doc.id, // Include the document ID
+                  ...doc.data(), // Include all the document data
+              }));
+    }
+
+    async getLikesOne(commentId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
+        const snapshot = await this.commentStore.doc(commentId).collection("likes").get();
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());
     }
 

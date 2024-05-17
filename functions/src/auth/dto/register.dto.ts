@@ -24,4 +24,10 @@ export class RegisterDto {
         type: String,
     })
     password: string;
+
+    @ApiProperty({
+        example: "Bombas1234",
+        type: String,
+    })
+    passwordConfirm: string;
 }

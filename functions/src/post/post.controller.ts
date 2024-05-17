@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
 import { ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { PostService } from "./post.service";
 import { CreatePost } from "./interfaces/create-post.interface";
 import { UpdatePost } from "./interfaces/update-post.interface";
+import { CreatePostLike } from "./interfaces/create-post-like.interface";
+import { AuthJwtGuard } from "src/auth/guards/jwt-auth.guard";
+import { CurrentUser } from "src/auth/decorators/current-user.decorator";
 
 @Controller("post")
 @ApiTags("Post")
@@ -24,8 +27,15 @@ export class PostController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    async createPost(@Body() createPostDto: CreatePost) {
-        return await this.postService.createPost(createPostDto);
+    @UseGuards(AuthJwtGuard)
+    async createPost(@Body() createPostDto: CreatePost, @CurrentUser() user) {
+        return await this.postService.createPost({ ...createPostDto, userId: user.userId });
+    }
+
+    @Post(":postId/like")
+    @HttpCode(HttpStatus.CREATED)
+    async createPostLike(@Param("postId") postId: string, @Body() createPostLikeDto: CreatePostLike) {
+        return await this.postService.createPostLike(createPostLikeDto);
     }
 
     @Put(":postId")

@@ -38,7 +38,7 @@ export default function FullPost() {
         await axios.patch(
             routes.updatePost(postId),
             {
-                userId: currentUser.userData.userId,
+                userId: currentUser.userId,
                 content: values.edit_content,
             },
             {
@@ -59,7 +59,7 @@ export default function FullPost() {
                 <hr className="bg-white" />
                 <div className="FullPostText">
                     <p>{post?.content}</p>
-                    {currentUser.userData.userId === post?.userId ? (
+                    {currentUser?.userId === post?.userId ? (
                         isEdite ? (
                             <>
                                 <form onSubmit={editePost} className="EditPostForm">

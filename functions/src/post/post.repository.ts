@@ -26,8 +26,14 @@ export class PostRepository {
 
     async getOne(postId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const doc = await this.postStore.doc(postId).get();
-        return doc.exists ? doc.data() : undefined;
+        return doc.exists
+            ? {
+                  id: doc.id, // Include the document ID
+                  ...doc.data(), // Include all the document data
+              }
+            : undefined;
     }
+
     async getLikesOne(postId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const snapshot = await this.postStore.doc(postId).collection("likes").get();
         return snapshot.empty ? [] : snapshot.docs.map((doc) => doc.data());

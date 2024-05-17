@@ -1,10 +1,10 @@
-import { createNestServer } from "./../index";
 import { Injectable } from "@nestjs/common";
 import { PostRepository } from "./post.repository";
 import { UserRepository } from "../user/user.repository";
 import { CommentRepository } from "../comment/comment.repository";
 import { CreatePost } from "./interfaces/create-post.interface";
 import { UpdatePost } from "./interfaces/update-post.interface";
+import { CreatePostLike } from "./interfaces/create-post-like.interface";
 
 @Injectable()
 export class PostService {
@@ -52,13 +52,56 @@ export class PostService {
         if (!post) {
             throw new Error("Post not found");
         }
+        const user = await this.userRepository.getOneByID(post.userId);
+        if (user) {
+            post.authorName = user.name;
+            post.authorLastName = user.lastname;
+        }
+        post.createdAt = post.createdAt._seconds * 1000 + post.createdAt._nanoseconds / 1000000;
+        console.log(post);
+        const postLikes = await this.postRepository.getLikesOne(post.id);
+        const counts = {
+            true: 0,
+            false: 0,
+        };
+        postLikes.forEach((item) => {
+            if (item.like == true) {
+                counts.true += 1;
+            } else {
+                counts.false += 1;
+            }
+        });
+        post.likeCount = counts.true;
+        post.dislikeCount = counts.false;
+        const comments = await this.commentRepository.getAllByPostId(post.id);
+        for (const comment of comments) {
+            const userComment = await this.userRepository.getOneByID(comment.userId);
+            const likesComment = await this.commentRepository.getLikesOne(comment.id);
+            const commentCounts = {
+                true: 0,
+                false: 0,
+            };
+            likesComment.forEach((item) => {
+                if (item.like == true) {
+                    commentCounts.true += 1;
+                } else {
+                    commentCounts.false += 1;
+                }
+            });
+            comment.login = userComment.login;
+            comment.likeCounts = commentCounts.true;
+            comment.dislikeCounts = commentCounts.false;
+        }
+        post.comments = comments;
         return post;
     }
 
     async createPost(post: CreatePost) {
         await this.postRepository.create(post);
-        return { isAuth: true, post: post };
+        return { post: post };
     }
+
+    async createPostLike(postLike: CreatePostLike) {}
 
     async updatePost(postId: string, post: UpdatePost) {
         await this.postRepository.update(postId, post);

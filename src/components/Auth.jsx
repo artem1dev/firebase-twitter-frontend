@@ -8,7 +8,7 @@ import routes from "../routes.js";
 import Context from "../context/Context.js";
 
 const validationAuth = yup.object({
-    login: yup.string().required("Cannot be blank").trim().min(6, "login short").max(24, "login long"),
+    email: yup.string().required('Cannot be blank').trim().email("Email must be a valid"),
     password: yup.string().required("Cannot be blank").trim().min(8, "password short"),
 });
 
@@ -22,7 +22,7 @@ export default function Auth() {
 
     const formik = useFormik({
         initialValues: {
-            login: "",
+            email: "",
             password: "",
         },
         validationSchema: validationAuth,
@@ -33,11 +33,10 @@ export default function Auth() {
                 const response = await axios.post(routes.authPath(), values);
                 console.log(response.data);
                 const currentUser = {
-                    token: response.data.values.token,
-                    currentUser: response.data.values,
+                    token: response.data.token,
+                    currentUser: {userId: response.data.userId}
                 };
                 localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                toast.info(response.data.values.message);
                 login();
                 navigate("/");
             } catch (err) {
@@ -59,18 +58,18 @@ export default function Auth() {
                 <h1>Sing In</h1>
                 <div>
                     <div>
-                        <label htmlFor="login">Login</label>
-                        <span className="Errors">{formik.errors.login ? " " + formik.errors.login : null}</span>
+                        <label htmlFor="email">Email</label>
+                        <span className="Errors">{formik.errors.email ? " " + formik.errors.email : null}</span>
                     </div>
                     <div>
                         <input
-                            id="login"
+                            id="email"
                             className="inputField"
-                            name="login"
-                            placeholder="Enter login"
+                            name="email"
+                            placeholder="Enter email"
                             onChange={formik.handleChange}
-                            value={formik.values.login}
-                            autoComplete="login"
+                            value={formik.values.email}
+                            autoComplete="email"
                         />
                     </div>
                 </div>
