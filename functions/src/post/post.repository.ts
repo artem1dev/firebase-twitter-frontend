@@ -3,6 +3,7 @@ import { Firestore } from "firebase-admin/firestore";
 import { FirebaseService } from "src/firebase/firebase.service";
 import { CreatePost } from "./interfaces/create-post.interface";
 import { UpdatePost } from "./interfaces/update-post.interface";
+import { CreatePostLike } from "./interfaces/create-post-like.interface";
 
 @Injectable()
 export class PostRepository {
@@ -55,6 +56,38 @@ export class PostRepository {
             createdAt: new Date(),
         };
         return await this.postStore.add(newPost);
+    }
+
+    async createPostLike(data: CreatePostLike) {
+        const postRef  = await this.postStore.doc(data.postId);
+        const postSnapshot = await postRef.get();
+        
+        if (!postSnapshot.exists) {
+            return "Post not found";
+        }
+        const post = postSnapshot.data();
+        if (post.userId === data.userId) {
+            return "You cannot like your own post!";
+        }
+        const likesRef = await postRef.collection("likes");
+        const likeSnapshot = await likesRef.where('userId', '==', data.userId).get();
+        if (!likeSnapshot.empty) {
+            const likeDoc = likeSnapshot.docs[0];
+            const likeData = likeDoc.data();
+            if (likeData.like === data.like) {
+                await likeDoc.ref.delete();
+                return "Like on post deleted successfully";
+            } else {
+                await likeDoc.ref.update({ like: data.like });
+                return "Like on post updated";
+            }
+        } else {
+            await likesRef.add({
+                userId: data.userId,
+                like: data.like
+            });
+            return "Like on post created";
+        }
     }
 
     async update(postId: string, post: UpdatePost): Promise<void> {

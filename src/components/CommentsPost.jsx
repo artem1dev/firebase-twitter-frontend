@@ -24,7 +24,7 @@ const normalizaDate = (date) => {
     }, ${currentDate.getFullYear()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
 };
 
-export default function CommentsPost({ idComment, comment, users, token, postId }) {
+export default function CommentsPost({ idComment, comment, userName, userLastname, token, postId }) {
     return (
         <div>
             <div className="Comment_Block">
@@ -32,7 +32,7 @@ export default function CommentsPost({ idComment, comment, users, token, postId 
                     <a href={`/profile/${comment?.userId}`}>
                         <span>
                             <img className="commentimg" src="/avatars/default.png" />
-                            {users ? " " + users : null}
+                            {userName && userLastname ? " " + `${userName} ${userLastname}` : null}
                         </span>
                     </a>
                     <span>{normalizaDate(comment?.createdAt)}</span>
@@ -92,9 +92,10 @@ export default function CommentsPost({ idComment, comment, users, token, postId 
                             {comment.replies.map((reply) => (
                                 <li key={reply._id}>
                                     <CommentsPost
-                                        idComment={reply._id}
+                                        idComment={reply.id}
                                         comment={reply}
-                                        users={reply.login}
+                                        userName={reply.name}
+                                        userLastname={reply.lastname}
                                         token={token}
                                         postId={postId}
                                     />

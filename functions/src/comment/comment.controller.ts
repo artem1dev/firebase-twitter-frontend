@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
 import { ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { CommentService } from "./comment.service";
 import { CreateComment } from "./interfaces/create-comment.interface";
 import { UpdateComment } from "./interfaces/update-comment.interface";
+import { AuthJwtGuard } from "src/auth/guards/jwt-auth.guard";
+import { CurrentUser } from "src/auth/decorators/current-user.decorator";
+import { CreateCommentLike } from "./interfaces/create-comment-like.interface";
 
 @Controller("comment")
 @ApiTags("Comment")
@@ -24,8 +27,16 @@ export class CommentController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    async createComment(@Body() createCommentDto: CreateComment) {
-        return await this.commentService.createComment(createCommentDto);
+    @UseGuards(AuthJwtGuard)
+    async createComment(@Body() createCommentDto: CreateComment, @CurrentUser() user) {
+        return await this.commentService.createComment({ ...createCommentDto, userId: user.userId });
+    }
+
+    @Post(":commentId/like")
+    @HttpCode(HttpStatus.CREATED)
+    @UseGuards(AuthJwtGuard)
+    async createCommentLike(@Param("commentId") commentId: string, @Body() createCommentLikeDto: CreateCommentLike, @CurrentUser() user) {
+        return await this.commentService.createCommentLike({ ...createCommentLikeDto, commentId: commentId, userId: user.userId });
     }
 
     @Put(":commentId")

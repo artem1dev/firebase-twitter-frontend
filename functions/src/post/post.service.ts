@@ -87,11 +87,24 @@ export class PostService {
                     commentCounts.false += 1;
                 }
             });
-            comment.login = userComment.login;
+            comment.createdAt = comment.createdAt._seconds * 1000 + comment.createdAt._nanoseconds / 1000000;
+            comment.name = userComment.name;
+            comment.lastname = userComment.lastname;
             comment.likeCounts = commentCounts.true;
             comment.dislikeCounts = commentCounts.false;
         }
-        post.comments = comments;
+        const buildTree = (parentId = null) => {
+            try {
+                return comments
+                    .filter((comment) => (comment.parentId ? comment.parentId : null) === parentId)
+                    .map((comment) => ({
+                        ...comment,
+                        replies: buildTree(comment.id),
+                    }));
+            } catch (error) {
+            }
+        };
+        post.comments = buildTree(null);
         return post;
     }
 
@@ -123,7 +136,6 @@ export class PostService {
                 const comments = await this.commentRepository.getAllByPostId(post.id);
                 post.commentsCount = comments.length;
             }
-            console.log(posts)
             return posts;
         }
         return "Posts not found";
@@ -135,7 +147,10 @@ export class PostService {
         return { post: post };
     }
 
-    async createPostLike(postLike: CreatePostLike) {}
+    async createPostLike(postLike: CreatePostLike) {
+        await this.postRepository.createPostLike(postLike);
+        return { post: postLike };
+    }
 
     async updatePost(postId: string, post: UpdatePost) {
         await this.postRepository.update(postId, post);

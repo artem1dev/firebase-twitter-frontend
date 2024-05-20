@@ -31,14 +31,15 @@ export default function Auth() {
         onSubmit: async (values) => {
             try {
                 const response = await axios.post(routes.authPath(), values);
-                console.log(response.data);
-                const currentUser = {
-                    token: response.data.token,
-                    currentUser: {userId: response.data.userId}
-                };
-                localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                login();
-                navigate("/");
+                if(response.data != "invalid creds") {
+                    const currentUser = {
+                        token: response.data.token,
+                        currentUser: {userId: response.data.userId}
+                    };
+                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                    login();
+                    navigate("/");
+                }
             } catch (err) {
                 if (err.isAxiosError && err.response.status === 400) {
                     const responseErrors = err.response.data.errors.errors;

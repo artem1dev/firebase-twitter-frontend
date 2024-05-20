@@ -26,7 +26,6 @@ export class AuthService {
 
     async createUser(createAuthDto: RegisterDto) {
         const user = await this.firebaseService.createUserWithEmailAndPassword(createAuthDto);
-        console.log(user);
         const userProfile = {
             userId: user.uid,
             email: createAuthDto.email,
@@ -41,13 +40,17 @@ export class AuthService {
     }
 
     async signIn(createAuthDto: LoginDto) {
-        const user = await this.firebaseService.signInWithEmailAndPassword(createAuthDto);
-        if (!user) {
-            return "invalid creds";
-        }
-        return {
-            userId: user.uid,
-            token: this.getTokenForUser(user.email, user.uid),
-        };
+        try {
+            const user = await this.firebaseService.signInWithEmailAndPassword(createAuthDto);
+            if (!user) {
+                return "invalid creds";
+            }
+            return {
+                userId: user.uid,
+                token: this.getTokenForUser(user.email, user.uid),
+            };
+        } catch (error) {
+            
+        } 
     }
 }

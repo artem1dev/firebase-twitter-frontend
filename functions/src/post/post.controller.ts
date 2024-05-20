@@ -40,8 +40,9 @@ export class PostController {
 
     @Post(":postId/like")
     @HttpCode(HttpStatus.CREATED)
-    async createPostLike(@Param("postId") postId: string, @Body() createPostLikeDto: CreatePostLike) {
-        return await this.postService.createPostLike(createPostLikeDto);
+    @UseGuards(AuthJwtGuard)
+    async createPostLike(@Param("postId") postId: string, @Body() createPostLikeDto: CreatePostLike, @CurrentUser() user) {
+        return await this.postService.createPostLike({ ...createPostLikeDto, postId: postId, userId: user.userId });
     }
 
     @Put(":postId")

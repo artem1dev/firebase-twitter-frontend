@@ -144,9 +144,10 @@ export default function FullPost() {
                             return (
                                 <li key={comment._id}>
                                     <CommentsPost
-                                        idComment={comment._id}
+                                        idComment={comment.id}
                                         comment={comment}
-                                        users={comment.login}
+                                        userName={comment.name}
+                                        userLastname={comment.lastname}
                                         token={token}
                                         postId={postId}
                                     />

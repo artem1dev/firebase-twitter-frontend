@@ -3,6 +3,8 @@ import { Firestore } from "firebase-admin/firestore";
 import { FirebaseService } from "src/firebase/firebase.service";
 import { CreateComment } from "./interfaces/create-comment.interface";
 import { UpdateComment } from "./interfaces/update-comment.interface";
+import { CreatePostLike } from "src/post/interfaces/create-post-like.interface";
+import { CreateCommentLike } from "./interfaces/create-comment-like.interface";
 
 @Injectable()
 export class CommentRepository {
@@ -50,7 +52,43 @@ export class CommentRepository {
     }
 
     async create(comment: CreateComment) {
-        return await this.commentStore.add(comment);
+        const newComment = {
+            ...comment,
+            createdAt: new Date(),
+        };
+        return await this.commentStore.add(newComment);
+    }
+
+    async createCommentLike(data: CreateCommentLike) {
+        const commentRef  = await this.commentStore.doc(data.commentId);
+        const commentSnapshot = await commentRef.get();
+        
+        if (!commentSnapshot.exists) {
+            return "Comment not found";
+        }
+        const comment = commentSnapshot.data();
+        if (comment.userId === data.userId) {
+            return "You cannot like your own comment!";
+        }
+        const likesRef = await commentRef.collection("likes");
+        const likeSnapshot = await likesRef.where('userId', '==', data.userId).get();
+        if (!likeSnapshot.empty) {
+            const likeDoc = likeSnapshot.docs[0];
+            const likeData = likeDoc.data();
+            if (likeData.like === data.like) {
+                await likeDoc.ref.delete();
+                return "Like on comment deleted successfully";
+            } else {
+                await likeDoc.ref.update({ like: data.like });
+                return "Like on comment updated";
+            }
+        } else {
+            await likesRef.add({
+                userId: data.userId,
+                like: data.like
+            });
+            return "Like on comment created";
+        }
     }
 
     async update(commentId: string, comment: UpdateComment): Promise<void> {
