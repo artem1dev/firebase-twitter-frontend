@@ -7,6 +7,7 @@ export default {
     deleteUserById: (id) => [apiUrl, "user", id].join("/"),
     allPost: () => [apiUrl, "post"].join("/"),
     updatePost: (id) => [apiUrl, "post", id].join("/"),
+    deletePost: (id) => [apiUrl, "post", id].join("/"),
     getPostsById: (id) => [apiUrl, "post", id].join("/"),
     getPostsByUserId: (id) => [apiUrl, "post", "user", id].join("/"),
     createPost: (token) => [apiUrl, "post"].join("/"),

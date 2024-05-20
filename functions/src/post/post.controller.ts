@@ -49,13 +49,13 @@ export class PostController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthJwtGuard)
     async updatePost(@Param("postId") postId: string, @Body() updatePostDto: UpdatePost, @CurrentUser() user) {
-        console.log(updatePostDto)
         return await this.postService.updatePost(postId, updatePostDto);
     }
 
     @Delete(":postId")
     @HttpCode(HttpStatus.NO_CONTENT)
-    async deletePost(@Param("postId") postId: string) {
+    @UseGuards(AuthJwtGuard)
+    async deletePost(@Param("postId") postId: string, @CurrentUser() user) {
         return await this.postService.deletePost(postId);
     }
 }

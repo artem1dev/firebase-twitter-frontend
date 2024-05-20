@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import NotFound from "./404";
 import routes from "../routes.js";
@@ -9,6 +9,7 @@ import CommentsPost from "./CommentsPost.jsx";
 import CreateCommentPost from "./CreateCommentPost";
 
 export default function FullPost() {
+    const navigate = useNavigate();
     const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
     const dispatch = useDispatch();
     const postId = useParams().id;
@@ -100,6 +101,25 @@ export default function FullPost() {
                                 </button>
                             </div>
                         )
+                    ) : null}
+                    {currentUser?.userId === post?.userId ? (
+                        <>
+                            <button onClick={async () => {
+                                    const response = await axios.delete(
+                                        routes.deletePost(postId),
+                                        {
+                                            headers: {
+                                                authorization: token,
+                                            },
+                                        },
+                                    );
+                                    navigate("/");
+                                    window.location.reload();
+                                }}
+                                className="CancelEdit_btn">
+                                    Delete post
+                            </button>
+                        </>
                     ) : null}
                 </div>
 

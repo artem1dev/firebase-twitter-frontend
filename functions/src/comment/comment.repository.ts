@@ -98,4 +98,16 @@ export class CommentRepository {
     async delete(commentId: string): Promise<void> {
         await this.commentStore.doc(commentId).delete();
     }
+
+    async deleteByPostId(postId: string): Promise<void> {
+        const snapshot = await this.commentStore.where('postId', '==', postId).get();
+        if (snapshot.empty) {
+            return;
+        }
+        const batch = this.firestore.batch();
+        snapshot.docs.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        await batch.commit();
+    }
 }

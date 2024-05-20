@@ -158,6 +158,7 @@ export class PostService {
     }
 
     async deletePost(postId: string) {
+        await this.commentRepository.deleteByPostId(postId);
         await this.postRepository.delete(postId);
         return { deleted: true };
     }
