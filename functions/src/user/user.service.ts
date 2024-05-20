@@ -2,10 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
 import { CreateUser } from "./interfaces/create-user.interface";
 import { UpdateUser } from "./interfaces/update-user.interface";
+import { FirebaseService } from "src/firebase/firebase.service";
 
 @Injectable()
 export class UserService {
-    constructor(private readonly userRepository: UserRepository) {}
+    constructor(private readonly userRepository: UserRepository, private readonly firebaseService: FirebaseService) { }
 
     async getAllUsers() {
         return await this.userRepository.getAll();
@@ -31,6 +32,7 @@ export class UserService {
 
     async deleteUser(userId: string) {
         await this.userRepository.delete(userId);
+        await this.firebaseService.deleteUser(userId);
         return { deleted: true };
     }
 }
