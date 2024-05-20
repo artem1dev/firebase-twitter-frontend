@@ -24,22 +24,26 @@ export default function FullPost() {
         });
     }, []);
     const error = useSelector((state) => state.posts.error);
-    const [editData, setEditData] = useState("");
+    const [editDataTitle, setEditDataTitle] = useState("");
+    const [editDataContent, setEditDataContent] = useState("");
     const [isEdite, setEdite] = useState(false);
     useEffect(() => {
+        if (post?.title !== undefined) {
+            setEditDataTitle(post?.title);
+        }
         if (post?.content !== undefined) {
-            setEditData(post?.content);
+            setEditDataContent(post?.content);
         }
     }, [post]);
 
     const editePost = async (values) => {
         setEdite(false);
         window.location.reload(false);
-        await axios.patch(
+        await axios.put(
             routes.updatePost(postId),
             {
-                userId: currentUser.userId,
-                content: values.edit_content,
+                content: editDataContent,
+                title: editDataTitle,
             },
             {
                 headers: {
@@ -63,13 +67,21 @@ export default function FullPost() {
                         isEdite ? (
                             <>
                                 <form onSubmit={editePost} className="EditPostForm">
+                                <textarea
+                                        id="edit_title"
+                                        className="edit_title"
+                                        name="edit_title"
+                                        type="text"
+                                        onChange={(e) => setEditDataTitle(e.target.value)}
+                                        value={editDataTitle}
+                                    />
                                     <textarea
                                         id="edit_content"
                                         className="edit_content"
                                         name="edit_content"
                                         type="text"
-                                        onChange={(e) => setEditData(e.target.value)}
-                                        value={editData}
+                                        onChange={(e) => setEditDataContent(e.target.value)}
+                                        value={editDataContent}
                                     />
                                     <div className="EditPostBtnBlock">
                                         <button type="submit" className="SaveEdit_btn">

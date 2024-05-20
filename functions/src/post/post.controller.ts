@@ -47,7 +47,9 @@ export class PostController {
 
     @Put(":postId")
     @HttpCode(HttpStatus.OK)
-    async updatePost(@Param("postId") postId: string, @Body() updatePostDto: UpdatePost) {
+    @UseGuards(AuthJwtGuard)
+    async updatePost(@Param("postId") postId: string, @Body() updatePostDto: UpdatePost, @CurrentUser() user) {
+        console.log(updatePostDto)
         return await this.postService.updatePost(postId, updatePostDto);
     }
 

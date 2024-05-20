@@ -91,10 +91,17 @@ export class PostRepository {
     }
 
     async update(postId: string, post: UpdatePost): Promise<void> {
-        await this.postStore.doc(postId).update(post);
+        const updatePayload: { [key: string]: any } = {};
+        if (post.content) {
+            updatePayload['content'] = post.content;
+        }
+        if (post.title) {
+            updatePayload['title'] = post.title;
+        }
+        await this.postStore.doc(postId).update(updatePayload);
     }
 
     async delete(postId: string): Promise<void> {
         await this.postStore.doc(postId).delete();
-    }
+    } 
 }
