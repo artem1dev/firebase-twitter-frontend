@@ -12,6 +12,7 @@ export default {
     getPostsByUserId: (id) => [apiUrl, "post", "user", id].join("/"),
     createPost: (token) => [apiUrl, "post"].join("/"),
     createPostComment: () => [apiUrl, "comment"].join("/"),
+    updatePostComment: (id) => [apiUrl, "comment", id].join("/"),
     deletePostComment: (id) => [apiUrl, "comment", id].join("/"),
     getPhoto: (name) => ["http://localhost:8080", "avatars", name].join("/"),
     createPostLike: (id) => [apiUrl, "post", id, "like"].join("/"),

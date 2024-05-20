@@ -92,7 +92,11 @@ export class CommentRepository {
     }
 
     async update(commentId: string, comment: UpdateComment): Promise<void> {
-        await this.commentStore.doc(commentId).update(comment);
+        const updatePayload: { [key: string]: any } = {};
+        if (comment.content) {
+            updatePayload["content"] = comment.content;
+        }
+        await this.commentStore.doc(commentId).update(updatePayload);
     }
 
     async delete(commentId: string): Promise<void> {

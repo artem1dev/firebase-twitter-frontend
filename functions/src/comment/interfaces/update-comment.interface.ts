@@ -1,3 +1,3 @@
 export interface UpdateComment {
-    [key: string]: any;
+    content?: string;
 }
