@@ -67,9 +67,9 @@ export class FirebaseService {
     async deleteUser(uid: string) {
         try {
             await admin.auth().deleteUser(uid);
-            console.log('Successfully deleted user');
+            console.log("Successfully deleted user");
         } catch (error) {
-        console.error('Error deleting user:', error);
+            console.error("Error deleting user:", error);
         }
     }
 }

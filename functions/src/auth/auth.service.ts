@@ -49,8 +49,6 @@ export class AuthService {
                 userId: user.uid,
                 token: this.getTokenForUser(user.email, user.uid),
             };
-        } catch (error) {
-            
-        } 
+        } catch (error) {}
     }
 }

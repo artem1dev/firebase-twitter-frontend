@@ -101,8 +101,7 @@ export class PostService {
                         ...comment,
                         replies: buildTree(comment.id),
                     }));
-            } catch (error) {
-            }
+            } catch (error) {}
         };
         post.comments = buildTree(null);
         return post;
@@ -140,7 +139,6 @@ export class PostService {
         }
         return "Posts not found";
     }
-
 
     async createPost(post: CreatePost) {
         await this.postRepository.create(post);

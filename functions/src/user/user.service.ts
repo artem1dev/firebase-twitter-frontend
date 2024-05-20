@@ -6,7 +6,10 @@ import { FirebaseService } from "src/firebase/firebase.service";
 
 @Injectable()
 export class UserService {
-    constructor(private readonly userRepository: UserRepository, private readonly firebaseService: FirebaseService) { }
+    constructor(
+        private readonly userRepository: UserRepository,
+        private readonly firebaseService: FirebaseService,
+    ) {}
 
     async getAllUsers() {
         return await this.userRepository.getAll();

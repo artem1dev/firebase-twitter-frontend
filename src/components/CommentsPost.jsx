@@ -25,6 +25,8 @@ const normalizaDate = (date) => {
 };
 
 export default function CommentsPost({ idComment, comment, userName, userLastname, token, postId }) {
+    const { currentUser } = JSON.parse(localStorage.getItem("currentUser"));
+
     return (
         <div>
             <div className="Comment_Block">
@@ -83,6 +85,25 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                             <img src="/dislike.png" className="userimg" />
                         </button>
                         {comment?.dislikeCounts}
+                        {currentUser?.userId === comment?.userId ? (
+                            <>
+                                <button
+                                    onClick={async () => {
+                                        const response = await axios.delete(
+                                            routes.deletePostComment(idComment),
+                                            {
+                                                headers: {
+                                                    authorization: token,
+                                                },
+                                            },
+                                        );
+                                        window.location.reload();
+                                    }}
+                                >
+                                    <img src="/trash.png" className="userimg" />
+                                </button>
+                            </>
+                        ) : null}
                     </p>
                 </div>
             </div>

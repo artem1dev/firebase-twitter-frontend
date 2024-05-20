@@ -60,9 +60,9 @@ export class CommentRepository {
     }
 
     async createCommentLike(data: CreateCommentLike) {
-        const commentRef  = await this.commentStore.doc(data.commentId);
+        const commentRef = await this.commentStore.doc(data.commentId);
         const commentSnapshot = await commentRef.get();
-        
+
         if (!commentSnapshot.exists) {
             return "Comment not found";
         }
@@ -71,7 +71,7 @@ export class CommentRepository {
             return "You cannot like your own comment!";
         }
         const likesRef = await commentRef.collection("likes");
-        const likeSnapshot = await likesRef.where('userId', '==', data.userId).get();
+        const likeSnapshot = await likesRef.where("userId", "==", data.userId).get();
         if (!likeSnapshot.empty) {
             const likeDoc = likeSnapshot.docs[0];
             const likeData = likeDoc.data();
@@ -85,7 +85,7 @@ export class CommentRepository {
         } else {
             await likesRef.add({
                 userId: data.userId,
-                like: data.like
+                like: data.like,
             });
             return "Like on comment created";
         }
@@ -96,16 +96,33 @@ export class CommentRepository {
     }
 
     async delete(commentId: string): Promise<void> {
+        const idsToDelete = [];
+        const fetchComments = async (parentId) => {
+            const snapshot = await this.commentStore.where("parentId", "==", parentId).get();
+            if (!snapshot.empty) {
+                for (const doc of snapshot.docs) {
+                    idsToDelete.push(doc.id);
+                    await fetchComments(doc.id); // Recursively fetch replies
+                }
+            }
+        };
+        await fetchComments(commentId);
+        const batch = this.firestore.batch();
+        idsToDelete.forEach((id) => {
+            const ref = this.commentStore.doc(id);
+            batch.delete(ref);
+        });
+        await batch.commit();
         await this.commentStore.doc(commentId).delete();
     }
 
     async deleteByPostId(postId: string): Promise<void> {
-        const snapshot = await this.commentStore.where('postId', '==', postId).get();
+        const snapshot = await this.commentStore.where("postId", "==", postId).get();
         if (snapshot.empty) {
             return;
         }
         const batch = this.firestore.batch();
-        snapshot.docs.forEach(doc => {
+        snapshot.docs.forEach((doc) => {
             batch.delete(doc.ref);
         });
         await batch.commit();

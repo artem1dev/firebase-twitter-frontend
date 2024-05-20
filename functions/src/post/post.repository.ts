@@ -36,7 +36,7 @@ export class PostRepository {
     }
 
     async getPostByUserId(userId: string): Promise<FirebaseFirestore.DocumentData[]> {
-        const snapshot = await this.postStore.where('userId', '==', userId).get();
+        const snapshot = await this.postStore.where("userId", "==", userId).get();
         return snapshot.empty
             ? []
             : snapshot.docs.map((doc) => ({
@@ -59,9 +59,9 @@ export class PostRepository {
     }
 
     async createPostLike(data: CreatePostLike) {
-        const postRef  = await this.postStore.doc(data.postId);
+        const postRef = await this.postStore.doc(data.postId);
         const postSnapshot = await postRef.get();
-        
+
         if (!postSnapshot.exists) {
             return "Post not found";
         }
@@ -70,7 +70,7 @@ export class PostRepository {
             return "You cannot like your own post!";
         }
         const likesRef = await postRef.collection("likes");
-        const likeSnapshot = await likesRef.where('userId', '==', data.userId).get();
+        const likeSnapshot = await likesRef.where("userId", "==", data.userId).get();
         if (!likeSnapshot.empty) {
             const likeDoc = likeSnapshot.docs[0];
             const likeData = likeDoc.data();
@@ -84,7 +84,7 @@ export class PostRepository {
         } else {
             await likesRef.add({
                 userId: data.userId,
-                like: data.like
+                like: data.like,
             });
             return "Like on post created";
         }
@@ -93,15 +93,15 @@ export class PostRepository {
     async update(postId: string, post: UpdatePost): Promise<void> {
         const updatePayload: { [key: string]: any } = {};
         if (post.content) {
-            updatePayload['content'] = post.content;
+            updatePayload["content"] = post.content;
         }
         if (post.title) {
-            updatePayload['title'] = post.title;
+            updatePayload["title"] = post.title;
         }
         await this.postStore.doc(postId).update(updatePayload);
     }
 
     async delete(postId: string): Promise<void> {
         await this.postStore.doc(postId).delete();
-    } 
+    }
 }
