@@ -25,6 +25,12 @@ export class PostController {
         return await this.postService.getPostById(postId);
     }
 
+    @Get("user/:userId")
+    @HttpCode(HttpStatus.OK)
+    async getPostByUserId(@Param("userId") userId: string) {
+        return await this.postService.getPostByUserId(userId);
+    }
+
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @UseGuards(AuthJwtGuard)

@@ -58,7 +58,6 @@ export class PostService {
             post.authorLastName = user.lastname;
         }
         post.createdAt = post.createdAt._seconds * 1000 + post.createdAt._nanoseconds / 1000000;
-        console.log(post);
         const postLikes = await this.postRepository.getLikesOne(post.id);
         const counts = {
             true: 0,
@@ -95,6 +94,41 @@ export class PostService {
         post.comments = comments;
         return post;
     }
+
+    async getPostByUserId(userId: string) {
+        const posts = await this.postRepository.getPostByUserId(userId);
+
+        if (posts) {
+            for (const post of posts) {
+                const user = await this.userRepository.getOneByID(post.userId);
+                if (user) {
+                    post.authorName = user.name;
+                    post.authorLastName = user.lastname;
+                }
+                post.createdAt = post.createdAt._seconds * 1000 + post.createdAt._nanoseconds / 1000000;
+                const postLikes = await this.postRepository.getLikesOne(post.id);
+                const counts = {
+                    true: 0,
+                    false: 0,
+                };
+                postLikes.forEach((item) => {
+                    if (item.like == true) {
+                        counts.true += 1;
+                    } else {
+                        counts.false += 1;
+                    }
+                });
+                post.likeCount = counts.true;
+                post.dislikeCount = counts.false;
+                const comments = await this.commentRepository.getAllByPostId(post.id);
+                post.commentsCount = comments.length;
+            }
+            console.log(posts)
+            return posts;
+        }
+        return "Posts not found";
+    }
+
 
     async createPost(post: CreatePost) {
         await this.postRepository.create(post);

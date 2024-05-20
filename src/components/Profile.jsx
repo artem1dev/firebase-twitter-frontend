@@ -13,14 +13,14 @@ export default function Profile() {
     useEffect(() => {
         const fetchPostsByUserId = async (userId) => {
             const response = await axios.get(routes.getPostsByUserId(userId));
-            return response.data.values;
+            return response.data;
         };
         fetchPostsByUserId(id).then((data) => {
             setUserPosts(data);
         });
         const fetchUserInfo = async (userId) => {
             const response = await axios.get(routes.getUserById(userId));
-            return response.data.values;
+            return response.data;
         };
         fetchUserInfo(id).then((data) => {
             setUser(data);
@@ -33,7 +33,7 @@ export default function Profile() {
                 <div className="ProfileForm">
                     <div>
                         <div className="top-block">
-                            <h1>{user?.login}</h1>
+                            <h1>{user?.name} {user?.lastname}</h1>
                             <span className="roleTitle">{user?.role} </span>
                         </div>
                     </div>
@@ -42,11 +42,11 @@ export default function Profile() {
                             <span>About</span>
                             <div>
                                 <div className="profileitem">
-                                    Login: <span>{user?.login}</span>
+                                    Email: <span>{user?.email}</span>
                                 </div>
                             </div>
                         </div>
-                        {currentUser.userId === id ? (
+                        {currentUser?.userId === id ? (
                             <button onClick={async () => {
                                     const response = await axios.delete(
                                         routes.deleteUserById(id),
