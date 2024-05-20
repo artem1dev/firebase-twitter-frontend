@@ -27,6 +27,37 @@ export default function Profile() {
         });
     }, []);
 
+    const [editUserName, setEditDataName] = useState("");
+    const [editUserLastName, setEditDataLastName] = useState("");
+    const [isEdit, setEdit] = useState(false);
+    useEffect(() => {
+        if (user?.name !== undefined) {
+            setEditDataName(user?.name);
+        }
+        if (user?.lastname !== undefined) {
+            setEditDataLastName(user?.lastname);
+        }
+    }, [user]);
+
+    const editProfile = async (values) => {
+        setEdit(false);
+        window.location.reload(false);
+        await axios.put(
+            routes.updateUserById(id),
+            {
+                name: editUserName,
+                lastname: editUserLastName,
+            },
+            {
+                headers: {
+                    authorization: token,
+                },
+            },
+        );
+        window.location.reload();
+    };
+
+
     return (
         <>
             <div className="divProfileBlock">
@@ -64,6 +95,44 @@ export default function Profile() {
                                     Delete user
                                 </button>
                             ) : ""}
+                        {currentUser?.userId === id ? (
+                        isEdit ? (
+                            <>
+                                <form onSubmit={editProfile} className="EditPostForm">
+                                <textarea
+                                        id="edit_title"
+                                        className="edit_title"
+                                        name="edit_title"
+                                        type="text"
+                                        onChange={(e) => setEditDataName(e.target.value)}
+                                        value={editUserName}
+                                    />
+                                    <textarea
+                                        id="edit_content"
+                                        className="edit_title"
+                                        name="edit_content"
+                                        type="text"
+                                        onChange={(e) => setEditDataLastName(e.target.value)}
+                                        value={editUserLastName}
+                                    />
+                                    <div className="EditPostBtnBlock">
+                                        <button type="submit" className="SaveEdit_btn">
+                                            Save edit
+                                        </button>
+                                        <button onClick={() => setEdit(false)} className="CancelEdit_btn">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        ) : (
+                            <div>
+                                <button className="EditPost_btn" onClick={() => setEdit(true)}>
+                                    Edit
+                                </button>
+                            </div>
+                        )
+                    ) : null}
                     </div>
                 </div>
             </div>

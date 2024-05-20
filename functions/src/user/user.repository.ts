@@ -46,7 +46,14 @@ export class UserRepository {
     }
 
     async update(userId: string, user: UpdateUser): Promise<void> {
-        await this.userStore.doc(userId).update(user);
+        const updatePayload: { [key: string]: any } = {};
+        if (user.name) {
+            updatePayload["name"] = user.name;
+        }
+        if (user.lastname) {
+            updatePayload["lastname"] = user.lastname;
+        }
+        await this.userStore.doc(userId).update(updatePayload);
     }
 
     async delete(userId: string): Promise<void> {
