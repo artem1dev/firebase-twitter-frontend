@@ -3,6 +3,7 @@ const apiUrl = "http://localhost:8080";
 export default {
     registerPath: () => [apiUrl, "auth", "register"].join("/"),
     authPath: () => [apiUrl, "auth", "login"].join("/"),
+    authByGooglePath: () => [apiUrl, "auth", "loginByGoogle"].join("/"),
     getUserById: (id) => [apiUrl, "user", id].join("/"),
     updateUserById: (id) => [apiUrl, "user", id].join("/"),
     deleteUserById: (id) => [apiUrl, "user", id].join("/"),

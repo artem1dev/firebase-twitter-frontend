@@ -5,6 +5,9 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase-config.js';
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const validationRegister = yup.object({
     email: yup.string().required("Cannot be blank").trim().min(6, "email short").max(24, "email long"),
@@ -22,11 +25,37 @@ export default function Register() {
         inputRef.current?.focus();
     }, []);
 
+    const handleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const user = result.user;
+            const db = getFirestore();
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+            const parts = user.displayName.split(" ");
+            if (!docSnap.exists()) {
+                await setDoc(userRef, {
+                    userId: user.uid,
+                    email: user.email,
+                    name: parts[0],
+                    lastname: parts[1],
+                    createdAt: new Date()
+                });
+            }
+            navigate("/auth");
+        } catch (error) {
+            console.error("Error during sign-in or user document creation: ", error);
+        }
+    };
+
     const formik = useFormik({
         initialValues: {
             email: "",
             password: "",
             passwordConfirm: "",
+            name: "",
+            lastName: "",
             terms: false,
         },
         validationSchema: validationRegister,
@@ -42,8 +71,8 @@ export default function Register() {
                     email: values.email,
                     password: values.password,
                     confirmPassword: values.passwordConfirm,
-                    name: "Artem",
-                    lastName: "Bondar"
+                    name: values.name,
+                    lastName: values.lastName
                 });
                 navigate("/auth");
             } catch (err) {
@@ -120,6 +149,40 @@ export default function Register() {
                 </div>
                 <div>
                     <div>
+                        <label htmlFor="Name">Name</label>{" "}
+                        <span className="Errors">{formik.errors.name ? formik.errors.name : null}</span>
+                    </div>
+                    <div>
+                        <input
+                            id="Name"
+                            className="inputField"
+                            name="Name"
+                            placeholder="Enter name"
+                            onChange={formik.handleChange}
+                            value={formik.values.Name}
+                            autoComplete="Name"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label htmlFor="login">LastName</label>{" "}
+                        <span className="Errors">{formik.errors.lastName ? formik.errors.lastName : null}</span>
+                    </div>
+                    <div>
+                        <input
+                            id="lastName"
+                            className="inputField"
+                            name="lastName"
+                            placeholder="Enter lastName"
+                            onChange={formik.handleChange}
+                            value={formik.values.lastName}
+                            autoComplete="lastName"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <div>
                         <input
                             id="terms"
                             aria-describedby="terms"
@@ -134,6 +197,9 @@ export default function Register() {
                 </div>
                 <button type="submit" className="Submit_btn">
                     Sign Up
+                </button>
+                <button onClick={handleSignIn} className="SubmitGoogle_btn">
+                    Sign Up with google <img src="/google.png" className="userimg" />
                 </button>
                 <p>
                     Already have an account?

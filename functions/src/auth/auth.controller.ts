@@ -1,9 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Headers, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 import { ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { CurrentUser } from "./decorators/current-user.decorator";
+import { loginByGoogleDto } from "./dto/loginByGoogle.dto";
 
 @Controller("auth")
 @ApiTags("Auth")
@@ -21,5 +22,12 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     async login(@Body() loginDto: LoginDto, @CurrentUser() user) {
         return await this.authService.signIn(loginDto);
+    }
+
+    @Post("/loginByGoogle")
+    @HttpCode(HttpStatus.OK)
+    async loginByGoogle(@Body() loginDto: loginByGoogleDto, @Headers('authorization') token: string) {
+        console.log(loginDto)
+        return await this.authService.signInByGoogle({...loginDto, token: token});
     }
 }

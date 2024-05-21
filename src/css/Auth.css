@@ -51,6 +51,25 @@
     transition: 0.3s; 
 }
 
+.SubmitGoogle_btn{
+    background-color: cornsilk; 
+    border-radius: 29px; 
+    border: 1px solid #081F2D; 
+    color: #081F2D; 
+    font-size: 0.2in;
+    vertical-align: middle;
+    padding: 10px 45px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+    
+.SubmitGoogle_btn:hover{ 
+    background-color: #081F2D; 
+    color: cornsilk; 
+    border-color: #081F2D; 
+    transition: 0.3s; 
+}
+
 .Errors
 {
     color: red;

@@ -48,6 +48,15 @@ export class FirebaseService {
         return getFirestore();
     }
 
+    async verifyToken(idToken) {
+        try {
+            await admin.auth().verifyIdToken(idToken);
+            return true; 
+        } catch (error) {
+            return false; 
+        }
+    }
+
     async createUserWithEmailAndPassword({ email, password }: { email: string; password: string }) {
         const userRecord = await this.getAuth().createUser({
             email,
