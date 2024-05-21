@@ -37,7 +37,6 @@ export default function CreatePost() {
                         authorization: token,
                     },
                 });
-
                 toast.info(response.data.massage);
                 navigate("/");
             } catch (err) {

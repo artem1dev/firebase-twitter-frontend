@@ -119,6 +119,12 @@ export default function Auth() {
                             autoComplete="password"
                         />
                     </div>
+                    <p>
+						Forgot password?
+						<a href="/resetpassword">
+							Reset It
+						</a>
+					</p>
                 </div>
                 <button type="submit" className="Submit_btn">
                     Sign In
