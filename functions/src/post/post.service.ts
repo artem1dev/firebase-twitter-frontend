@@ -14,9 +14,9 @@ export class PostService {
         private readonly commentRepository: CommentRepository,
     ) {}
 
-    async getAllPosts() {
-        const posts = await this.postRepository.getAll();
-
+    async getAllPosts({ page, limit }) {
+        const data = await this.postRepository.getAll({ page, limit });
+        const posts = data.data;
         if (posts) {
             for (const post of posts) {
                 const user = await this.userRepository.getOneByID(post.userId);
@@ -42,7 +42,28 @@ export class PostService {
                 const comments = await this.commentRepository.getAllByPostId(post.id);
                 post.commentsCount = comments.length;
             }
-            return posts;
+            posts.sort((a, b) => {
+                const aDate = new Date(a.createdAt);
+                const bDate = new Date(b.createdAt);
+                aDate.setHours(0, 0, 0, 0);
+                bDate.setHours(0, 0, 0, 0);
+            
+                const aDayStart = aDate.getTime();
+                const bDayStart = bDate.getTime();
+            
+                if (bDayStart !== aDayStart) {
+                    return bDayStart - aDayStart;
+                }
+                if (b.likeCount !== a.likeCount) {
+                    return b.likeCount - a.likeCount;
+                }
+                return b.commentsCount - a.commentsCount;
+            });
+            return {
+                data: posts,
+                currentPage: data.currentPage,
+                totalPages: data.totalPages,
+            };
         }
         return "Posts not found";
     }

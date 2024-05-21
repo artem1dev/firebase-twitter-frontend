@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, UseGuards, Query } from "@nestjs/common";
 import { ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { PostService } from "./post.service";
 import { CreatePost } from "./interfaces/create-post.interface";
@@ -11,12 +11,12 @@ import { CurrentUser } from "src/auth/decorators/current-user.decorator";
 @ApiTags("Post")
 @ApiInternalServerErrorResponse({ description: "Oh, something went wrong" })
 export class PostController {
-    constructor(private readonly postService: PostService) {}
+    constructor(private readonly postService: PostService) { }
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAllPosts() {
-        return await this.postService.getAllPosts();
+    async getAllPosts(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+        return await this.postService.getAllPosts({ page, limit });
     }
 
     @Get(":postId")
