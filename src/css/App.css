@@ -75,3 +75,41 @@
 	color: cornsilk;
     background-color: #5aca3e;
 }
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.search-container input {
+	background-color: #414141;
+	color: cornsilk;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #414141;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    width: 400px;
+    transition: border-color 0.3s;
+}
+
+.search-container input:focus {
+    border-color: #970a13;
+}
+
+.search-container button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #CA3E47;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    transition: background-color 0.3s;
+}
+
+.search-container button:hover {
+    background-color: #970a13;
+}

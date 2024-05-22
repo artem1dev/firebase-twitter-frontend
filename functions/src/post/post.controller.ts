@@ -11,12 +11,18 @@ import { CurrentUser } from "src/auth/decorators/current-user.decorator";
 @ApiTags("Post")
 @ApiInternalServerErrorResponse({ description: "Oh, something went wrong" })
 export class PostController {
-    constructor(private readonly postService: PostService) { }
+    constructor(private readonly postService: PostService) {}
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAllPosts(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    async getAllPosts(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
         return await this.postService.getAllPosts({ page, limit });
+    }
+
+    @Get("search")
+    @HttpCode(HttpStatus.OK)
+    async findPosts(@Query("text") text: string) {
+        return await this.postService.findPosts(text);
     }
 
     @Get(":postId")

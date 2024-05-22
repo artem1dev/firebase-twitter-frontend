@@ -4,6 +4,7 @@ import routes from "../routes.js";
 import Post from "./Post.jsx";
 
 export default function Home() {
+    const [title, setTitle] = useState('');
     const [posts, setPosts] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -22,12 +23,38 @@ export default function Home() {
         });
     }, [currentPage]);
 
+    const handleSearch = async () => {
+        try {
+            if(title == "") {
+                window.location.reload();
+                return;
+            }
+            const response = await axios.get(routes.findPost(), {
+                params: { 
+                    text: title
+                }
+            });
+            setPosts(response.data);
+        } catch (error) {
+            console.error('Failed to fetch posts:', error);
+        }
+    };
+
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
     };
 
     return (
         <>
+            <div className="search-container">
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Search by title"
+                />
+                <button onClick={handleSearch}>Search</button>
+            </div>
             {posts && (
                 <>
                     <div className="All_Posts">

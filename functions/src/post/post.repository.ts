@@ -15,30 +15,45 @@ export class PostRepository {
         this.postStore = this.firestore.collection("posts");
     }
 
-    async getAll({ page, limit }): Promise<{ data: FirebaseFirestore.DocumentData[], totalPages: number, currentPage: number }> {
-        const allDocsSnapshot = await this.postStore.orderBy('createdAt', 'desc').get();
+    async getAll({
+        page,
+        limit,
+    }): Promise<{ data: FirebaseFirestore.DocumentData[]; totalPages: number; currentPage: number }> {
+        const allDocsSnapshot = await this.postStore.orderBy("createdAt", "desc").get();
         const totalDocuments = allDocsSnapshot.size;
         const totalPages = Math.ceil(totalDocuments / limit);
         const offset = (page - 1) * limit;
         // Use the documents already fetched to slice out the page data
-        const data = allDocsSnapshot.docs.slice(offset, offset + limit).map(doc => ({
+        const data = allDocsSnapshot.docs.slice(offset, offset + limit).map((doc) => ({
             id: doc.id,
             ...doc.data(),
         }));
         return {
             data,
             totalPages,
-            currentPage: page
+            currentPage: page,
         };
+    }
+
+    async findPosts(text: string): Promise<FirebaseFirestore.DocumentData[] | undefined> {
+        const snapshot = await this.postStore.get();
+        return snapshot.empty
+            ? []
+            : snapshot.docs
+                  .filter((doc) => doc.data().title.toLowerCase().includes(text.toLowerCase()))
+                  .map((doc) => ({
+                      id: doc.id, // Include the document ID
+                      ...doc.data(), // Include all the document data
+                  }));
     }
 
     async getOne(postId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         const doc = await this.postStore.doc(postId).get();
         return doc.exists
             ? {
-                id: doc.id, // Include the document ID
-                ...doc.data(), // Include all the document data
-            }
+                  id: doc.id, // Include the document ID
+                  ...doc.data(), // Include all the document data
+              }
             : undefined;
     }
 
@@ -47,9 +62,9 @@ export class PostRepository {
         return snapshot.empty
             ? []
             : snapshot.docs.map((doc) => ({
-                id: doc.id, // Include the document ID
-                ...doc.data(), // Include all the document data
-            }));
+                  id: doc.id, // Include the document ID
+                  ...doc.data(), // Include all the document data
+              }));
     }
 
     async getLikesOne(postId: string): Promise<FirebaseFirestore.DocumentData | undefined> {

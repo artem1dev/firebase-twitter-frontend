@@ -47,10 +47,10 @@ export class PostService {
                 const bDate = new Date(b.createdAt);
                 aDate.setHours(0, 0, 0, 0);
                 bDate.setHours(0, 0, 0, 0);
-            
+
                 const aDayStart = aDate.getTime();
                 const bDayStart = bDate.getTime();
-            
+
                 if (bDayStart !== aDayStart) {
                     return bDayStart - aDayStart;
                 }
@@ -64,6 +64,55 @@ export class PostService {
                 currentPage: data.currentPage,
                 totalPages: data.totalPages,
             };
+        }
+        return "Posts not found";
+    }
+
+    async findPosts(text: string) {
+        const posts = await this.postRepository.findPosts(text);
+        if (posts) {
+            for (const post of posts) {
+                const user = await this.userRepository.getOneByID(post.userId);
+                if (user) {
+                    post.authorName = user.name;
+                    post.authorLastName = user.lastname;
+                }
+                post.createdAt = post.createdAt._seconds * 1000 + post.createdAt._nanoseconds / 1000000;
+                const postLikes = await this.postRepository.getLikesOne(post.id);
+                const counts = {
+                    true: 0,
+                    false: 0,
+                };
+                postLikes.forEach((item) => {
+                    if (item.like == true) {
+                        counts.true += 1;
+                    } else {
+                        counts.false += 1;
+                    }
+                });
+                post.likeCount = counts.true;
+                post.dislikeCount = counts.false;
+                const comments = await this.commentRepository.getAllByPostId(post.id);
+                post.commentsCount = comments.length;
+            }
+            posts.sort((a, b) => {
+                const aDate = new Date(a.createdAt);
+                const bDate = new Date(b.createdAt);
+                aDate.setHours(0, 0, 0, 0);
+                bDate.setHours(0, 0, 0, 0);
+
+                const aDayStart = aDate.getTime();
+                const bDayStart = bDate.getTime();
+
+                if (bDayStart !== aDayStart) {
+                    return bDayStart - aDayStart;
+                }
+                if (b.likeCount !== a.likeCount) {
+                    return b.likeCount - a.likeCount;
+                }
+                return b.commentsCount - a.commentsCount;
+            });
+            return posts;
         }
         return "Posts not found";
     }

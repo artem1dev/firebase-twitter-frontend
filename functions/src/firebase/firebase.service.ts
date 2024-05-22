@@ -51,9 +51,9 @@ export class FirebaseService {
     async verifyToken(idToken) {
         try {
             await admin.auth().verifyIdToken(idToken);
-            return true; 
+            return true;
         } catch (error) {
-            return false; 
+            return false;
         }
     }
 
