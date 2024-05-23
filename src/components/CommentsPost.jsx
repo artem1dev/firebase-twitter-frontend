@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import routes from "../routes.js";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
 import CreateReplyCommentPost from "./CreateReplyCommentPost";
 
 const normalizaDate = (date) => {
@@ -58,8 +57,8 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                 <div className="Comment_Header">
                     <a href={`/profile/${comment?.userId}`}>
                         <span>
-                            <img className="commentimg" src="/avatars/default.png" />
-                            {userName && userLastname ? " " + `${userName} ${userLastname}` : null}
+                            <img alt="some" className="commentimg" src="/avatars/default.png" />
+                            {userName && userLastname ? ` ${userName} ${userLastname}` : null}
                         </span>
                     </a>
                     <span>{normalizaDate(comment?.createdAt)}</span>
@@ -91,7 +90,7 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                         ) : (
                             <div>
                                 <button className="EditPost_btn" onClick={() => setEdit(true)}>
-                                    <img src="/pen.png" className="userimg" />
+                                    <img alt="some" src="/pen.png" className="userimg" />
                                 </button>
                             </div>
                         )
@@ -104,7 +103,7 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                     <p>
                         <button
                             onClick={async () => {
-                                const response = await axios.post(
+                                await axios.post(
                                     routes.createCommentLike(idComment),
                                     {
                                         like: true,
@@ -118,12 +117,12 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                                 window.location.reload();
                             }}
                         >
-                            <img src="/like.png" className="userimg" />
+                            <img alt="some" src="/like.png" className="userimg" />
                         </button>
                         {comment?.likeCounts}
                         <button
                             onClick={async () => {
-                                const response = await axios.post(
+                                await axios.post(
                                     routes.createCommentLike(idComment),
                                     {
                                         like: false,
@@ -137,14 +136,14 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                                 window.location.reload();
                             }}
                         >
-                            <img src="/dislike.png" className="userimg" />
+                            <img alt="some" src="/dislike.png" className="userimg" />
                         </button>
                         {comment?.dislikeCounts}
                         {currentUser?.userId === comment?.userId ? (
                             <>
                                 <button
                                     onClick={async () => {
-                                        const response = await axios.delete(
+                                        await axios.delete(
                                             routes.deletePostComment(idComment),
                                             {
                                                 headers: {
@@ -155,7 +154,7 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                                         window.location.reload();
                                     }}
                                 >
-                                    <img src="/trash.png" className="userimg" />
+                                    <img alt="some" src="/trash.png" className="userimg" />
                                 </button>
                             </>
                         ) : null}

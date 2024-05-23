@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
 import Context from "../context/Context.js";
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase-config.js';
 
 const validationAuth = yup.object({
@@ -25,7 +25,6 @@ export default function Auth() {
     const handleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            const credential = GoogleAuthProvider.credentialFromResult(result);
             const response = await axios.post(routes.authByGooglePath(), {
                 email: result.user.email,
                 userId: result.user.uid
@@ -34,7 +33,7 @@ export default function Auth() {
                     authorization: result.user.accessToken,
                 },
             });
-            if(response.status == 200){
+            if(response.status === 200){
                 const currentUser = {
                     token: response.data.token,
                     currentUser: { userId: response.data.userId }
@@ -59,7 +58,7 @@ export default function Auth() {
         onSubmit: async (values) => {
             try {
                 const response = await axios.post(routes.authPath(), values);
-                if (response.data != "invalid creds") {
+                if (response.data !== "invalid creds") {
                     const currentUser = {
                         token: response.data.token,
                         currentUser: { userId: response.data.userId }
@@ -130,7 +129,7 @@ export default function Auth() {
                     Sign In
                 </button>
                 <button onClick={handleSignIn} className="SubmitGoogle_btn">
-                    Sign In with google <img src="/google.png" className="userimg" />
+                    Sign In with google <img alt="some" src="/google.png" className="userimg" />
                 </button>
                 <p>
                     Don't have an account?

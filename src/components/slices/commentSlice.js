@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import routes from "../../routes.js";
-import _ from "lodash";
 
 export const fetchAllCommentPost = createAsyncThunk("categories/allCommentPost", async (id) => {
     const response = await axios.get(routes.commentsPost(id));

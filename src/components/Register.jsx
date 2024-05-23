@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase-config.js';
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
@@ -28,7 +28,6 @@ export default function Register() {
     const handleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            const credential = GoogleAuthProvider.credentialFromResult(result);
             const user = result.user;
             const db = getFirestore();
             const userRef = doc(db, "users", user.uid);
@@ -67,7 +66,7 @@ export default function Register() {
                 return;
             }
             try {
-                const response = await axios.post(routes.registerPath(), {
+                await axios.post(routes.registerPath(), {
                     email: values.email,
                     password: values.password,
                     confirmPassword: values.passwordConfirm,
@@ -191,7 +190,7 @@ export default function Register() {
                             checked={formik.values.terms}
                         />{" "}
                         <label htmlFor="terms">
-                            I accept the <a href="#">Terms and Conditions</a>
+                            I accept the Terms and Conditions
                         </label>
                     </div>
                 </div>
@@ -199,7 +198,7 @@ export default function Register() {
                     Sign Up
                 </button>
                 <button onClick={handleSignIn} className="SubmitGoogle_btn">
-                    Sign Up with google <img src="/google.png" className="userimg" />
+                    Sign Up with google <img alt="some" src="/google.png" className="userimg" />
                 </button>
                 <p>
                     Already have an account?

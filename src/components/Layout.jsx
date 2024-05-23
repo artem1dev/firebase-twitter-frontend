@@ -2,10 +2,10 @@ import { Outlet, Link } from "react-router-dom";
 import React, { useContext } from "react";
 import Context from "../context/Context.js";
 
-export default (props) => {
+export default function Layout(props) {
     const { logout } = useContext(Context);
     const { isLogin } = props;
-    const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
+    const { currentUser } = JSON.parse(localStorage.getItem("currentUser"));
 
     const logoutUser = async () => {
         try {

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -14,8 +13,7 @@ const validationCreatePost = yup.object({
 });
 
 export default function CreatePost() {
-    const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
-    const dispatch = useDispatch();
+    const { token } = JSON.parse(localStorage.getItem("currentUser"));
     const inputRef = useRef();
     const navigate = useNavigate();
     useEffect(() => {

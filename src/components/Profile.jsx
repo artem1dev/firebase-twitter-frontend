@@ -25,7 +25,7 @@ export default function Profile() {
         fetchUserInfo(id).then((data) => {
             setUser(data);
         });
-    }, []);
+    });
 
     const [editUserName, setEditDataName] = useState("");
     const [editUserLastName, setEditDataLastName] = useState("");
@@ -79,7 +79,7 @@ export default function Profile() {
                         </div>
                         {currentUser?.userId === id ? (
                             <button onClick={async () => {
-                                    const response = await axios.delete(
+                                    await axios.delete(
                                         routes.deleteUserById(id),
                                         {
                                             headers: {

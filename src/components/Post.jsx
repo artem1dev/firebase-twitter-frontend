@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const normalizaDate = (date) => {
     const currentDate = new Date(date);
@@ -26,9 +25,6 @@ const hiddenText = (text) => {
 };
 
 export default function Post({ post }) {
-    const dispatch = useDispatch();
-    const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
-    const users = useSelector((state) => state.users.entities);
     return (
         post && (
             <div key={post.id} className="PostBlock">
@@ -51,15 +47,15 @@ export default function Post({ post }) {
                             </div>
                             <div>
                                 <div>
-                                    <img src="/comment.png" className="userimg" />
+                                    <img alt="some" src="/comment.png" className="userimg" />
                                     <span>{" " + post?.commentsCount}</span>
                                 </div>
                                 <div>
-                                    <img src="/like.png" className="userimg" />
+                                    <img alt="some" src="/like.png" className="userimg" />
                                     <span>{" " + post?.likeCount}</span>
                                 </div>
                                 <div>
-                                    <img src="/dislike.png" className="userimg" />
+                                    <img alt="some" src="/dislike.png" className="userimg" />
                                     <span>{" " + post?.dislikeCount}</span>
                                 </div>
                             </div>

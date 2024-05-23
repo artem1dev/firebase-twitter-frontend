@@ -1,6 +1,6 @@
 const apiUrl = process.env.REACT_APP_BACKENDHOST;
 
-export default {
+const routes = {
     registerPath: () => [apiUrl, "auth", "register"].join("/"),
     authPath: () => [apiUrl, "auth", "login"].join("/"),
     authByGooglePath: () => [apiUrl, "auth", "loginByGoogle"].join("/"),
@@ -21,3 +21,5 @@ export default {
     createPostLike: (id) => [apiUrl, "post", id, "like"].join("/"),
     createCommentLike: (id) => [apiUrl, "comment", id, "like"].join("/"),
 };
+
+export default routes;

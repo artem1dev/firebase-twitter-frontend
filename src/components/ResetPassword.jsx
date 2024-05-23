@@ -1,10 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import axios from 'axios';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import routes from '../routes.js';
 
 import { auth } from '../firebase-config.js';
 import { sendPasswordResetEmail } from 'firebase/auth';

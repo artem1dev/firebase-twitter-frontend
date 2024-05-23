@@ -25,7 +25,7 @@ export default function Home() {
 
     const handleSearch = async () => {
         try {
-            if(title == "") {
+            if(title === "") {
                 window.location.reload();
                 return;
             }

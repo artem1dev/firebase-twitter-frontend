@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -11,7 +11,6 @@ import CreateCommentPost from "./CreateCommentPost";
 export default function FullPost() {
     const navigate = useNavigate();
     const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
-    const dispatch = useDispatch();
     const postId = useParams().id;
     const [post, setPosts] = useState(null);
     useEffect(() => {
@@ -23,7 +22,7 @@ export default function FullPost() {
             setPosts(data);
             console.log(data);
         });
-    }, []);
+    });
     const error = useSelector((state) => state.posts.error);
     const [editDataTitle, setEditDataTitle] = useState("");
     const [editDataContent, setEditDataContent] = useState("");
@@ -105,7 +104,7 @@ export default function FullPost() {
                     {currentUser?.userId === post?.userId ? (
                         <>
                             <button onClick={async () => {
-                                    const response = await axios.delete(
+                                    await axios.delete(
                                         routes.deletePost(postId),
                                         {
                                             headers: {
@@ -127,7 +126,7 @@ export default function FullPost() {
                     <p>
                         <button
                             onClick={async () => {
-                                const response = await axios.post(
+                                await axios.post(
                                     routes.createPostLike(postId),
                                     {
                                         like: true,
@@ -141,14 +140,14 @@ export default function FullPost() {
                                 window.location.reload();
                             }}
                         >
-                            <img src="/like.png" className="userimg" />
+                            <img alt="some" src="/like.png" className="userimg" />
                         </button>
                         {post?.likeCount}
                     </p>
                     <p>
                         <button
                             onClick={async () => {
-                                const response = await axios.post(
+                                await axios.post(
                                     routes.createPostLike(postId),
                                     {
                                         like: false,
@@ -162,7 +161,7 @@ export default function FullPost() {
                                 window.location.reload();
                             }}
                         >
-                            <img src="/dislike.png" className="userimg" />
+                            <img alt="some" src="/dislike.png" className="userimg" />
                         </button>
                         {post?.dislikeCount}
                     </p>

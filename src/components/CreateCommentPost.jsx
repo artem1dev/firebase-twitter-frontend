@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -11,8 +10,7 @@ const validationComment = yup.object({
 });
 
 export default function CreateCommentPost({ postId }) {
-    const dispatch = useDispatch();
-    const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
+    const { token } = JSON.parse(localStorage.getItem("currentUser"));
 
     const inputRef = useRef();
     const [isEdite, setEdite] = useState(false);
