@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PostRepository } from "./post.repository";
 import { UserRepository } from "../user/user.repository";
 import { CommentRepository } from "../comment/comment.repository";
@@ -65,7 +65,7 @@ export class PostService {
                 totalPages: data.totalPages,
             };
         }
-        return "Posts not found";
+        throw new NotFoundException("Posts not found");
     }
 
     async findPosts(text: string) {
@@ -114,13 +114,13 @@ export class PostService {
             });
             return posts;
         }
-        return "Posts not found";
+        throw new NotFoundException("Posts not found");
     }
 
     async getPostById(postId: string) {
         const post = await this.postRepository.getOne(postId);
         if (!post) {
-            throw new Error("Post not found");
+            throw new NotFoundException("Post not found");
         }
         const user = await this.userRepository.getOneByID(post.userId);
         if (user) {
@@ -207,7 +207,7 @@ export class PostService {
             }
             return posts;
         }
-        return "Posts not found";
+        throw new NotFoundException("Posts not found");
     }
 
     async createPost(post: CreatePost) {
@@ -220,14 +220,14 @@ export class PostService {
         return { post: postLike };
     }
 
-    async updatePost(postId: string, post: UpdatePost) {
-        await this.postRepository.update(postId, post);
+    async updatePost(postId: string, post: UpdatePost, userId: string) {
+        await this.postRepository.update(postId, post, userId);
         return { updated: true };
     }
 
-    async deletePost(postId: string) {
+    async deletePost(postId: string, userId: string) {
+        await this.postRepository.delete(postId, userId);
         await this.commentRepository.deleteByPostId(postId);
-        await this.postRepository.delete(postId);
         return { deleted: true };
     }
 }

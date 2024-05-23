@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:8080";
+const apiUrl = process.env.REACT_APP_BACKENDHOST;
 
 export default {
     registerPath: () => [apiUrl, "auth", "register"].join("/"),
@@ -17,7 +17,7 @@ export default {
     createPostComment: () => [apiUrl, "comment"].join("/"),
     updatePostComment: (id) => [apiUrl, "comment", id].join("/"),
     deletePostComment: (id) => [apiUrl, "comment", id].join("/"),
-    getPhoto: (name) => ["http://localhost:8080", "avatars", name].join("/"),
+    getPhoto: (name) => [apiUrl, "avatars", name].join("/"),
     createPostLike: (id) => [apiUrl, "post", id, "like"].join("/"),
     createCommentLike: (id) => [apiUrl, "comment", id, "like"].join("/"),
 };

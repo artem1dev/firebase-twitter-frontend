@@ -55,13 +55,13 @@ export class PostController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthJwtGuard)
     async updatePost(@Param("postId") postId: string, @Body() updatePostDto: UpdatePost, @CurrentUser() user) {
-        return await this.postService.updatePost(postId, updatePostDto);
+        return await this.postService.updatePost(postId, updatePostDto, user.userId);
     }
 
     @Delete(":postId")
     @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(AuthJwtGuard)
     async deletePost(@Param("postId") postId: string, @CurrentUser() user) {
-        return await this.postService.deletePost(postId);
+        return await this.postService.deletePost(postId, user.userId);
     }
 }

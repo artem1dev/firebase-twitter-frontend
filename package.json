@@ -30,7 +30,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "prettier": "prettier --write \"src/**/*.ts\"",
+        "prettier": "prettier --write \"src/**/*.jsx\"",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

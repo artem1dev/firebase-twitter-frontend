@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CommentRepository } from "./comment.repository";
 import { CreateComment } from "./interfaces/create-comment.interface";
 import { UpdateComment } from "./interfaces/update-comment.interface";
@@ -21,7 +21,7 @@ export class CommentService {
     async getCommentById(commentId: string) {
         const comment = await this.commentRepository.getOne(commentId);
         if (!comment) {
-            throw new Error("Comment not found");
+            throw new NotFoundException("Comment not found");
         }
         if (comment) {
             comment.createdAt = comment.createdAt._seconds * 1000 + comment.createdAt._nanoseconds / 1000000;
@@ -39,13 +39,13 @@ export class CommentService {
         return { comment: commentLike };
     }
 
-    async updateComment(commentId: string, comment: UpdateComment) {
-        await this.commentRepository.update(commentId, comment);
+    async updateComment(commentId: string, comment: UpdateComment, userId: string) {
+        await this.commentRepository.update(commentId, comment, userId);
         return { updated: true };
     }
 
-    async deleteComment(commentId: string) {
-        await this.commentRepository.delete(commentId);
+    async deleteComment(commentId: string, userId: string) {
+        await this.commentRepository.delete(commentId, userId);
         return { deleted: true };
     }
 }

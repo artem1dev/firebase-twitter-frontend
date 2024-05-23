@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
 import { CreateUser } from "./interfaces/create-user.interface";
 import { UpdateUser } from "./interfaces/update-user.interface";
@@ -18,7 +18,7 @@ export class UserService {
     async getUserById(userId: string) {
         const user = await this.userRepository.getOneByID(userId);
         if (!user) {
-            throw new Error("User not found");
+            throw new NotFoundException("User not found");
         }
         return user;
     }

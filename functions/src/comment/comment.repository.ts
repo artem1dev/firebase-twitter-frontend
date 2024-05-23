@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { Firestore } from "firebase-admin/firestore";
 import { FirebaseService } from "src/firebase/firebase.service";
 import { CreateComment } from "./interfaces/create-comment.interface";
@@ -64,11 +64,11 @@ export class CommentRepository {
         const commentSnapshot = await commentRef.get();
 
         if (!commentSnapshot.exists) {
-            return "Comment not found";
+            throw new NotFoundException("Comment not found");
         }
         const comment = commentSnapshot.data();
         if (comment.userId === data.userId) {
-            return "You cannot like your own comment!";
+            throw new ForbiddenException("You can like only own comments!");
         }
         const likesRef = await commentRef.collection("likes");
         const likeSnapshot = await likesRef.where("userId", "==", data.userId).get();
@@ -91,7 +91,16 @@ export class CommentRepository {
         }
     }
 
-    async update(commentId: string, comment: UpdateComment): Promise<void> {
+    async update(commentId: string, comment: UpdateComment, userId: string): Promise<void> {
+        const commentRef = await this.commentStore.doc(commentId);
+        const commentSnapshot = await commentRef.get();
+        if (!commentSnapshot.exists) {
+            throw new NotFoundException("Comment not found");
+        }
+        const commentOne = commentSnapshot.data();
+        if (commentOne.userId !== userId) {
+            throw new ForbiddenException("You can update only own comments!");
+        }
         const updatePayload: { [key: string]: any } = {};
         if (comment.content) {
             updatePayload["content"] = comment.content;
@@ -99,7 +108,16 @@ export class CommentRepository {
         await this.commentStore.doc(commentId).update(updatePayload);
     }
 
-    async delete(commentId: string): Promise<void> {
+    async delete(commentId: string, userId: string): Promise<void> {
+        const commentRef = await this.commentStore.doc(commentId);
+        const commentSnapshot = await commentRef.get();
+        if (!commentSnapshot.exists) {
+            throw new NotFoundException("Comment not found");
+        }
+        const commentOne = commentSnapshot.data();
+        if (commentOne.userId !== userId) {
+            throw new ForbiddenException("You can delete only own comments!");
+        }
         const idsToDelete = [];
         const fetchComments = async (parentId) => {
             const snapshot = await this.commentStore.where("parentId", "==", parentId).get();

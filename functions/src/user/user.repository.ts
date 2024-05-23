@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Firestore } from "firebase-admin/firestore";
 import { FirebaseService } from "src/firebase/firebase.service";
 import { CreateUser } from "./interfaces/create-user.interface";
@@ -27,7 +27,7 @@ export class UserRepository {
     async getOneByID(userId: string): Promise<FirebaseFirestore.DocumentData | undefined> {
         try {
             if (!userId || typeof userId !== "string" || userId.trim() === "") {
-                throw new Error("Invalid or empty userId provided");
+                throw new BadRequestException("Invalid or empty userId provided");
             }
             const doc = await this.userStore.doc(userId).get();
             return doc.exists
@@ -46,6 +46,11 @@ export class UserRepository {
     }
 
     async update(userId: string, user: UpdateUser): Promise<void> {
+        const userRef = await this.userStore.doc(userId);
+        const userSnapshot = await userRef.get();
+        if (!userSnapshot.exists) {
+            throw new NotFoundException("User not found");
+        }
         const updatePayload: { [key: string]: any } = {};
         if (user.name) {
             updatePayload["name"] = user.name;
@@ -57,6 +62,11 @@ export class UserRepository {
     }
 
     async delete(userId: string): Promise<void> {
+        const userRef = await this.userStore.doc(userId);
+        const userSnapshot = await userRef.get();
+        if (!userSnapshot.exists) {
+            throw new NotFoundException("User not found");
+        }
         await this.userStore.doc(userId).delete();
     }
 }

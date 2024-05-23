@@ -56,13 +56,11 @@ export default function Home() {
                 <button onClick={handleSearch}>Search</button>
             </div>
             {posts && (
-                <>
-                    <div className="All_Posts">
-                        {posts.map((post) => (
-                            <Post post={post} />
-                        ))}
-                    </div>
-                </>
+                <div className="All_Posts">
+                    {posts.map((post) => (
+                        <Post post={post} />
+                    ))}
+                </div>
             )}
             {totalPages > 1 && (
                 <div className="pagination">

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { Firestore } from "firebase-admin/firestore";
 import { FirebaseService } from "src/firebase/firebase.service";
 import { CreatePost } from "./interfaces/create-post.interface";
@@ -85,11 +85,11 @@ export class PostRepository {
         const postSnapshot = await postRef.get();
 
         if (!postSnapshot.exists) {
-            return "Post not found";
+            throw new NotFoundException("Post not found");
         }
         const post = postSnapshot.data();
         if (post.userId === data.userId) {
-            return "You cannot like your own post!";
+            throw new BadRequestException("You cannot like your own post!");
         }
         const likesRef = await postRef.collection("likes");
         const likeSnapshot = await likesRef.where("userId", "==", data.userId).get();
@@ -112,7 +112,16 @@ export class PostRepository {
         }
     }
 
-    async update(postId: string, post: UpdatePost): Promise<void> {
+    async update(postId: string, post: UpdatePost, userId: string): Promise<void> {
+        const postRef = await this.postStore.doc(postId);
+        const postSnapshot = await postRef.get();
+        if (!postSnapshot.exists) {
+            throw new NotFoundException("Post not found");
+        }
+        const postOne = postSnapshot.data();
+        if (postOne.userId !== userId) {
+            throw new ForbiddenException("You can update only own posts!");
+        }
         const updatePayload: { [key: string]: any } = {};
         if (post.content) {
             updatePayload["content"] = post.content;
@@ -123,7 +132,16 @@ export class PostRepository {
         await this.postStore.doc(postId).update(updatePayload);
     }
 
-    async delete(postId: string): Promise<void> {
+    async delete(postId: string, userId: string): Promise<void> {
+        const postRef = await this.postStore.doc(postId);
+        const postSnapshot = await postRef.get();
+        if (!postSnapshot.exists) {
+            throw new NotFoundException("Post not found");
+        }
+        const postOne = postSnapshot.data();
+        if (postOne.userId !== userId) {
+            throw new ForbiddenException("You can delete only own posts!");
+        }
         await this.postStore.doc(postId).delete();
     }
 }

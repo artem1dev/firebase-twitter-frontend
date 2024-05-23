@@ -38,7 +38,7 @@ export class CommentController {
     async createCommentLike(
         @Param("commentId") commentId: string,
         @Body() createCommentLikeDto: CreateCommentLike,
-        @CurrentUser() user,
+        @CurrentUser() user
     ) {
         return await this.commentService.createCommentLike({
             ...createCommentLikeDto,
@@ -49,13 +49,15 @@ export class CommentController {
 
     @Put(":commentId")
     @HttpCode(HttpStatus.OK)
-    async updateComment(@Param("commentId") commentId: string, @Body() updateCommentDto: UpdateComment) {
-        return await this.commentService.updateComment(commentId, updateCommentDto);
+    @UseGuards(AuthJwtGuard)
+    async updateComment(@Param("commentId") commentId: string, @Body() updateCommentDto: UpdateComment, @CurrentUser() user) {
+        return await this.commentService.updateComment(commentId, updateCommentDto, user.userId);
     }
 
     @Delete(":commentId")
     @HttpCode(HttpStatus.NO_CONTENT)
-    async deleteComment(@Param("commentId") commentId: string) {
-        return await this.commentService.deleteComment(commentId);
+    @UseGuards(AuthJwtGuard)
+    async deleteComment(@Param("commentId") commentId: string, @CurrentUser() user) {
+        return await this.commentService.deleteComment(commentId, user.userId);
     }
 }
