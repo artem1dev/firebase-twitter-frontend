@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
 import Context from "../context/Context.js";
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../firebase-config.js';
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase-config.js";
 
 const validationAuth = yup.object({
-    email: yup.string().required('Cannot be blank').trim().email("Email must be a valid"),
+    email: yup.string().required("Cannot be blank").trim().email("Email must be a valid"),
     password: yup.string().required("Cannot be blank").trim().min(8, "password short"),
 });
 
@@ -25,18 +25,22 @@ export default function Auth() {
     const handleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            const response = await axios.post(routes.authByGooglePath(), {
-                email: result.user.email,
-                userId: result.user.uid
-            }, {
-                headers: {
-                    authorization: result.user.accessToken,
+            const response = await axios.post(
+                routes.authByGooglePath(),
+                {
+                    email: result.user.email,
+                    userId: result.user.uid,
                 },
-            });
-            if(response.status === 200){
+                {
+                    headers: {
+                        authorization: result.user.accessToken,
+                    },
+                },
+            );
+            if (response.status === 200) {
                 const currentUser = {
                     token: response.data.token,
-                    currentUser: { userId: response.data.userId }
+                    currentUser: { userId: response.data.userId },
                 };
                 localStorage.setItem("currentUser", JSON.stringify(currentUser));
                 login();
@@ -61,7 +65,7 @@ export default function Auth() {
                 if (response.data !== "invalid creds") {
                     const currentUser = {
                         token: response.data.token,
-                        currentUser: { userId: response.data.userId }
+                        currentUser: { userId: response.data.userId },
                     };
                     localStorage.setItem("currentUser", JSON.stringify(currentUser));
                     login();
@@ -119,11 +123,9 @@ export default function Auth() {
                         />
                     </div>
                     <p>
-						Forgot password?
-						<a href="/resetpassword">
-							Reset It
-						</a>
-					</p>
+                        Forgot password?
+                        <a href="/resetpassword">Reset It</a>
+                    </p>
                 </div>
                 <button type="submit" className="Submit_btn">
                     Sign In

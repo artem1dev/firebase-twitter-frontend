@@ -41,7 +41,7 @@ export default function App() {
                         <Route index element={<Home />} />
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/resetpassword" element={<ResetPassword/>} />
+                        <Route path="/resetpassword" element={<ResetPassword />} />
                         <Route path="/create-post" element={<CreatePost />} />
                         <Route path="/post/:id" element={<FullPost />} />
                         <Route path="/profile/:id" element={<Profile />} />

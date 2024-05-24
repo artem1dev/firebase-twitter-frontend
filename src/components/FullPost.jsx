@@ -67,7 +67,7 @@ export default function FullPost() {
                         isEdite ? (
                             <>
                                 <form onSubmit={editePost} className="EditPostForm">
-                                <textarea
+                                    <textarea
                                         id="edit_title"
                                         className="edit_title"
                                         name="edit_title"
@@ -103,20 +103,19 @@ export default function FullPost() {
                     ) : null}
                     {currentUser?.userId === post?.userId ? (
                         <>
-                            <button onClick={async () => {
-                                    await axios.delete(
-                                        routes.deletePost(postId),
-                                        {
-                                            headers: {
-                                                authorization: token,
-                                            },
+                            <button
+                                onClick={async () => {
+                                    await axios.delete(routes.deletePost(postId), {
+                                        headers: {
+                                            authorization: token,
                                         },
-                                    );
+                                    });
                                     navigate("/");
                                     window.location.reload();
                                 }}
-                                className="CancelEdit_btn">
-                                    Delete post
+                                className="CancelEdit_btn"
+                            >
+                                Delete post
                             </button>
                         </>
                     ) : null}
@@ -168,7 +167,7 @@ export default function FullPost() {
                 </div>
                 <h2>Comments</h2>
                 <hr className="bg-white" />
-                <CreateCommentPost postId={postId}/>
+                <CreateCommentPost postId={postId} />
                 <div className="FullPostComment">
                     <ul>
                         {post?.comments.map((comment) => {

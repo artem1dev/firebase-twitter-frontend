@@ -4,7 +4,7 @@ import routes from "../routes.js";
 import Post from "./Post.jsx";
 
 export default function Home() {
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState("");
     const [posts, setPosts] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -12,12 +12,12 @@ export default function Home() {
     useEffect(() => {
         const fetchPosts = async (page) => {
             const response = await axios.get(routes.allPost(), {
-                params: { page, limit: 3 }
+                params: { page, limit: 3 },
             });
             return response.data;
         };
 
-        fetchPosts(currentPage).then(data => {
+        fetchPosts(currentPage).then((data) => {
             setPosts(data.data);
             setTotalPages(data.totalPages);
         });
@@ -25,18 +25,18 @@ export default function Home() {
 
     const handleSearch = async () => {
         try {
-            if(title === "") {
+            if (title === "") {
                 window.location.reload();
                 return;
             }
             const response = await axios.get(routes.findPost(), {
-                params: { 
-                    text: title
-                }
+                params: {
+                    text: title,
+                },
             });
             setPosts(response.data);
         } catch (error) {
-            console.error('Failed to fetch posts:', error);
+            console.error("Failed to fetch posts:", error);
         }
     };
 
@@ -47,12 +47,7 @@ export default function Home() {
     return (
         <>
             <div className="search-container">
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Search by title"
-                />
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Search by title" />
                 <button onClick={handleSearch}>Search</button>
             </div>
             {posts && (

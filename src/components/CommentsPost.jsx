@@ -97,7 +97,7 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                     ) : null}
                 </div>
                 <div className="">
-                    <CreateReplyCommentPost postId={postId} parentId={idComment}/>
+                    <CreateReplyCommentPost postId={postId} parentId={idComment} />
                 </div>
                 <div>
                     <p>
@@ -143,14 +143,11 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
                             <>
                                 <button
                                     onClick={async () => {
-                                        await axios.delete(
-                                            routes.deletePostComment(idComment),
-                                            {
-                                                headers: {
-                                                    authorization: token,
-                                                },
+                                        await axios.delete(routes.deletePostComment(idComment), {
+                                            headers: {
+                                                authorization: token,
                                             },
-                                        );
+                                        });
                                         window.location.reload();
                                     }}
                                 >
@@ -163,21 +160,21 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
             </div>
             <div>
                 {comment.replies && comment.replies.length > 0 && (
-                        <ul>
-                            {comment.replies.map((reply) => (
-                                <li key={reply._id}>
-                                    <CommentsPost
-                                        idComment={reply.id}
-                                        comment={reply}
-                                        userName={reply.name}
-                                        userLastname={reply.lastname}
-                                        token={token}
-                                        postId={postId}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    <ul>
+                        {comment.replies.map((reply) => (
+                            <li key={reply._id}>
+                                <CommentsPost
+                                    idComment={reply.id}
+                                    comment={reply}
+                                    userName={reply.name}
+                                    userLastname={reply.lastname}
+                                    token={token}
+                                    postId={postId}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );

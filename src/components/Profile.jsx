@@ -57,14 +57,15 @@ export default function Profile() {
         window.location.reload();
     };
 
-
     return (
         <>
             <div className="divProfileBlock">
                 <div className="ProfileForm">
                     <div>
                         <div className="top-block">
-                            <h1>{user?.name} {user?.lastname}</h1>
+                            <h1>
+                                {user?.name} {user?.lastname}
+                            </h1>
                             <span className="roleTitle">{user?.role} </span>
                         </div>
                     </div>
@@ -78,61 +79,62 @@ export default function Profile() {
                             </div>
                         </div>
                         {currentUser?.userId === id ? (
-                            <button onClick={async () => {
-                                    await axios.delete(
-                                        routes.deleteUserById(id),
-                                        {
-                                            headers: {
-                                                authorization: token,
-                                            },
+                            <button
+                                onClick={async () => {
+                                    await axios.delete(routes.deleteUserById(id), {
+                                        headers: {
+                                            authorization: token,
                                         },
-                                    );
+                                    });
                                     localStorage.setItem("currentUser", JSON.stringify({ currentUser: "guest" }));
                                     navigate("/");
                                     window.location.reload();
                                 }}
-                                className="Submit_btn">
-                                    Delete user
-                                </button>
-                            ) : ""}
-                        {currentUser?.userId === id ? (
-                        isEdit ? (
-                            <>
-                                <form onSubmit={editProfile} className="EditPostForm">
-                                <textarea
-                                        id="edit_title"
-                                        className="edit_title"
-                                        name="edit_title"
-                                        type="text"
-                                        onChange={(e) => setEditDataName(e.target.value)}
-                                        value={editUserName}
-                                    />
-                                    <textarea
-                                        id="edit_content"
-                                        className="edit_title"
-                                        name="edit_content"
-                                        type="text"
-                                        onChange={(e) => setEditDataLastName(e.target.value)}
-                                        value={editUserLastName}
-                                    />
-                                    <div className="EditPostBtnBlock">
-                                        <button type="submit" className="SaveEdit_btn">
-                                            Save edit
-                                        </button>
-                                        <button onClick={() => setEdit(false)} className="CancelEdit_btn">
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
-                            </>
+                                className="Submit_btn"
+                            >
+                                Delete user
+                            </button>
                         ) : (
-                            <div>
-                                <button className="EditPost_btn" onClick={() => setEdit(true)}>
-                                    Edit
-                                </button>
-                            </div>
-                        )
-                    ) : null}
+                            ""
+                        )}
+                        {currentUser?.userId === id ? (
+                            isEdit ? (
+                                <>
+                                    <form onSubmit={editProfile} className="EditPostForm">
+                                        <textarea
+                                            id="edit_title"
+                                            className="edit_title"
+                                            name="edit_title"
+                                            type="text"
+                                            onChange={(e) => setEditDataName(e.target.value)}
+                                            value={editUserName}
+                                        />
+                                        <textarea
+                                            id="edit_content"
+                                            className="edit_title"
+                                            name="edit_content"
+                                            type="text"
+                                            onChange={(e) => setEditDataLastName(e.target.value)}
+                                            value={editUserLastName}
+                                        />
+                                        <div className="EditPostBtnBlock">
+                                            <button type="submit" className="SaveEdit_btn">
+                                                Save edit
+                                            </button>
+                                            <button onClick={() => setEdit(false)} className="CancelEdit_btn">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </>
+                            ) : (
+                                <div>
+                                    <button className="EditPost_btn" onClick={() => setEdit(true)}>
+                                        Edit
+                                    </button>
+                                </div>
+                            )
+                        ) : null}
                     </div>
                 </div>
             </div>

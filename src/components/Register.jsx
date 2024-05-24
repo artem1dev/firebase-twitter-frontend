@@ -5,8 +5,8 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../firebase-config.js';
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase-config.js";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const validationRegister = yup.object({
@@ -39,7 +39,7 @@ export default function Register() {
                     email: user.email,
                     name: parts[0],
                     lastname: parts[1],
-                    createdAt: new Date()
+                    createdAt: new Date(),
                 });
             }
             navigate("/auth");
@@ -71,7 +71,7 @@ export default function Register() {
                     password: values.password,
                     confirmPassword: values.passwordConfirm,
                     name: values.name,
-                    lastName: values.lastName
+                    lastName: values.lastName,
                 });
                 navigate("/auth");
             } catch (err) {
@@ -189,9 +189,7 @@ export default function Register() {
                             onChange={formik.handleChange}
                             checked={formik.values.terms}
                         />{" "}
-                        <label htmlFor="terms">
-                            I accept the Terms and Conditions
-                        </label>
+                        <label htmlFor="terms">I accept the Terms and Conditions</label>
                     </div>
                 </div>
                 <button type="submit" className="Submit_btn">

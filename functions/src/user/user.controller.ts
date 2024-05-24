@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, UseGuards, ForbiddenException } from "@nestjs/common";
+import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    Delete,
+    Param,
+    Body,
+    HttpCode,
+    HttpStatus,
+    UseGuards,
+    ForbiddenException,
+} from "@nestjs/common";
 import { ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
 import { CreateUser } from "./interfaces/create-user.interface";
@@ -34,8 +46,7 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthJwtGuard)
     async updateUser(@Param("userId") userId: string, @Body() updateUserDto: UpdateUser, @CurrentUser() user) {
-        if(userId !== user.userId)
-            throw new ForbiddenException("You can update only own user!");
+        if (userId !== user.userId) throw new ForbiddenException("You can update only own user!");
         return await this.userService.updateUser(userId, updateUserDto);
     }
 
@@ -43,8 +54,7 @@ export class UserController {
     @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(AuthJwtGuard)
     async deleteUser(@Param("userId") userId: string, @CurrentUser() user) {
-        if(userId !== user.userId)
-            throw new ForbiddenException("You can delete only own user!");
+        if (userId !== user.userId) throw new ForbiddenException("You can delete only own user!");
         return await this.userService.deleteUser(userId);
     }
 }
