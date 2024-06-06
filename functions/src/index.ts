@@ -8,7 +8,11 @@ const server = express();
 
 export const createNestServer = async (expressInstance) => {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(expressInstance));
-
+    app.enableCors({
+        origin: ['https://fir-twitter-38195.web.app', "http://localhost:3000"],
+        methods: '*',
+        credentials: true,
+    })
     return app.init();
 };
 

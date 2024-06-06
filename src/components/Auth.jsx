@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
 import Context from "../context/Context.js";
@@ -124,7 +124,7 @@ export default function Auth() {
                     </div>
                     <p>
                         Forgot password?
-                        <a href="/resetpassword">Reset It</a>
+                        <Link to="/resetpassword">Reset It</Link>
                     </p>
                 </div>
                 <button type="submit" className="Submit_btn">
@@ -135,7 +135,7 @@ export default function Auth() {
                 </button>
                 <p>
                     Don't have an account?
-                    <a href="/register">Sign Up</a>
+                    <Link to="/register">Sign Up</Link>
                 </p>
             </form>
         </div>

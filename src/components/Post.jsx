@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const normalizaDate = (date) => {
     const currentDate = new Date(date);
@@ -34,7 +35,7 @@ export default function Post({ post }) {
                             <h5>{post?.title}</h5>
                         </div>
                         <p>
-                            By <a href={`/profile/${post?.userId}`}>{post?.authorName + " " + post?.authorLastName + " "}</a>
+                            By <Link to={`/profile/${post?.userId}`}>{post?.authorName + " " + post?.authorLastName + " "}</Link>
                         </p>
                     </div>
                     <div>
@@ -62,11 +63,11 @@ export default function Post({ post }) {
                         </div>
                         <br />
                         <div>
-                            <a href={`/post/${post?.id}`}>
+                            <Link to={`/post/${post?.id}`}>
                                 <button type="submit" className="Submit_btn">
                                     Reading
                                 </button>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

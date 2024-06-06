@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import axios from "axios";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import routes from "../routes.js";
 import { signInWithPopup } from "firebase/auth";
@@ -200,7 +200,7 @@ export default function Register() {
                 </button>
                 <p>
                     Already have an account?
-                    <a href="/auth">Sign in</a>
+                    <Link to="/auth">Sign in</Link>
                 </p>
             </form>
         </div>

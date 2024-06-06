@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import routes from "../routes.js";
 import axios from "axios";
 import CreateReplyCommentPost from "./CreateReplyCommentPost";
+import { Link } from "react-router-dom";
 
 const normalizaDate = (date) => {
     const currentDate = new Date(date);
@@ -55,12 +56,12 @@ export default function CommentsPost({ idComment, comment, userName, userLastnam
         <div>
             <div className="Comment_Block">
                 <div className="Comment_Header">
-                    <a href={`/profile/${comment?.userId}`}>
+                    <Link to={`/profile/${comment?.userId}`}>
                         <span>
                             <img alt="some" className="commentimg" src="/avatars/default.png" />
                             {userName && userLastname ? ` ${userName} ${userLastname}` : null}
                         </span>
-                    </a>
+                    </Link>
                     <span>{normalizaDate(comment?.createdAt)}</span>
                 </div>
                 <div className="">
