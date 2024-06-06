@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-import NotFound from "./404";
 import routes from "../routes.js";
 import CommentsPost from "./CommentsPost.jsx";
 import CreateCommentPost from "./CreateCommentPost";
@@ -20,10 +18,8 @@ export default function FullPost() {
         };
         fetchInfoPost(postId).then((data) => {
             setPosts(data);
-            console.log(data);
         });
-    });
-    const error = useSelector((state) => state.posts.error);
+    }, []);
     const [editDataTitle, setEditDataTitle] = useState("");
     const [editDataContent, setEditDataContent] = useState("");
     const [isEdite, setEdite] = useState(false);
@@ -54,9 +50,7 @@ export default function FullPost() {
         window.location.reload();
     };
 
-    return error ? (
-        <NotFound />
-    ) : (
+    return (
         <div className="FullPostBlock">
             <div className="FullPostContent">
                 <h1 className="FullPostTitle">{post?.title}</h1>
