@@ -10,7 +10,7 @@ import { auth, googleProvider } from "../firebase-config.js";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const validationRegister = yup.object({
-    email: yup.string().required("Cannot be blank").trim().min(6, "email short").max(24, "email long"),
+    email: yup.string().required("Cannot be blank").trim().min(6, "email short").max(100, "email long"),
     password: yup.string().required("Cannot be blank").trim().min(8, "Password short"),
     passwordConfirm: yup
         .string()
