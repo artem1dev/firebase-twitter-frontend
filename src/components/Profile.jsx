@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Post from "./Post.jsx";
 import axios from "axios";
 import routes from "../routes.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase-config.js";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Profile() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [imageUrl, setImageUrl] = useState("");
     const [user, setUser] = useState(null);
     const [userPosts, setUserPosts] = useState(null);
     const { currentUser, token } = JSON.parse(localStorage.getItem("currentUser"));
@@ -24,6 +28,14 @@ export default function Profile() {
         };
         fetchUserInfo(id).then((data) => {
             setUser(data);
+            const imageRef = ref(storage, `avatars/${data?.profilePic}`);
+            getDownloadURL(imageRef)
+                .then((url) => {
+                    setImageUrl(url);
+                })
+                .catch((error) => {
+                    console.error("Error fetching image:", error);
+                });
         });
     }, []);
 
@@ -57,6 +69,33 @@ export default function Profile() {
         window.location.reload();
     };
 
+    const fileInputRef = useRef(null);
+
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const fileName = uuidv4();
+            const storageRef = ref(storage, `avatars/${fileName}`);
+            await uploadBytes(storageRef, file);
+            await axios.put(
+                routes.updateUserById(id),
+                {
+                    profilePic: fileName,
+                },
+                {
+                    headers: {
+                        authorization: token,
+                    },
+                },
+            );
+            window.location.reload();
+        }
+    };
+
     return (
         <>
             <div className="divProfileBlock">
@@ -68,6 +107,18 @@ export default function Profile() {
                             </h1>
                             <span className="roleTitle">{user?.role} </span>
                         </div>
+                        {imageUrl ? (
+                            <img className="profimg" onClick={handleImageClick} alt="" src={imageUrl} />
+                        ) : (
+                            <p>Loading...</p>
+                        )}
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            style={{ display: "none" }}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                        />
                     </div>
                     <div>
                         <div>

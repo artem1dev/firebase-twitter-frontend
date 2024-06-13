@@ -35,7 +35,10 @@ export default function Post({ post }) {
                             <h5>{post?.title}</h5>
                         </div>
                         <p>
-                            By <Link to={`/profile/${post?.userId}`}>{post?.authorName + " " + post?.authorLastName + " "}</Link>
+                            By{" "}
+                            <Link to={`/profile/${post?.userId}`}>
+                                {post?.authorName + " " + post?.authorLastName + " "}
+                            </Link>
                         </p>
                     </div>
                     <div>

@@ -31,6 +31,7 @@ export class AuthService {
             userId: user.uid,
             email: createAuthDto.email,
             name: createAuthDto.name,
+            profilePic: "default.png",
             lastname: createAuthDto.lastName,
         };
         await this.userService.createUser(userProfile);

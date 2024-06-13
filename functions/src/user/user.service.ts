@@ -3,12 +3,14 @@ import { UserRepository } from "./user.repository";
 import { CreateUser } from "./interfaces/create-user.interface";
 import { UpdateUser } from "./interfaces/update-user.interface";
 import { FirebaseService } from "src/firebase/firebase.service";
+import { StoreService } from "src/store/store.service";
 
 @Injectable()
 export class UserService {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly firebaseService: FirebaseService,
+        private readonly storage: StoreService,
     ) {}
 
     async getAllUsers() {
@@ -26,6 +28,12 @@ export class UserService {
     async createUser(user: CreateUser) {
         await this.userRepository.create(user);
         return { isAuth: true, user: user };
+    }
+
+    async addProfilePicture(file: Buffer, mimeType: string, userId: any) {
+        console.log(1);
+        const filepath = await this.storage.uploadFile(file, mimeType);
+        console.log(2);
     }
 
     async updateUser(userId: string, user: UpdateUser) {

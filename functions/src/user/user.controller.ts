@@ -9,14 +9,19 @@ import {
     HttpCode,
     HttpStatus,
     UseGuards,
+    UploadedFile,
+    UseInterceptors,
     ForbiddenException,
+    BadRequestException,
+    Req,
 } from "@nestjs/common";
-import { ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
+import { ApiConsumes, ApiInternalServerErrorResponse, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
 import { CreateUser } from "./interfaces/create-user.interface";
 import { UpdateUser } from "./interfaces/update-user.interface";
 import { AuthJwtGuard } from "src/auth/guards/jwt-auth.guard";
 import { CurrentUser } from "src/auth/decorators/current-user.decorator";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("user")
 @ApiTags("User")
@@ -40,6 +45,18 @@ export class UserController {
     @HttpCode(HttpStatus.CREATED)
     async createUser(@Body() createUserDto: CreateUser) {
         return await this.userService.createUser(createUserDto);
+    }
+
+    @Post("/avatar")
+    @HttpCode(HttpStatus.CREATED)
+    @UseGuards(AuthJwtGuard)
+    async addProfilePicture(@Req() req, @CurrentUser() user) {
+        const file: Express.Multer.File = req.files?.find((file: Express.Multer.File) => file.fieldname === "image");
+        console.log(req.files);
+        if (!file) {
+            throw new BadRequestException("File is not provided");
+        }
+        await this.userService.addProfilePicture(file.buffer, file.mimetype, user.userId);
     }
 
     @Put(":userId")

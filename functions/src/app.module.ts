@@ -8,6 +8,7 @@ import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
 import { CommentModule } from "./comment/comment.module";
 import { PostModule } from "./post/post.module";
+import { StoreModule } from "./store/store.module";
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { PostModule } from "./post/post.module";
         AuthModule,
         CommentModule,
         PostModule,
+        StoreModule,
     ],
     controllers: [AppController],
     providers: [AppService],

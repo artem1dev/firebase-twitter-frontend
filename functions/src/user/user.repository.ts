@@ -42,7 +42,10 @@ export class UserRepository {
     }
 
     async create(user: CreateUser): Promise<void> {
-        await this.userStore.doc(user.userId).set(user);
+        await this.userStore.doc(user.userId).set({
+            ...user,
+            profilePic: "default.png",
+        });
     }
 
     async update(userId: string, user: UpdateUser): Promise<void> {
@@ -57,6 +60,9 @@ export class UserRepository {
         }
         if (user.lastname) {
             updatePayload["lastname"] = user.lastname;
+        }
+        if (user.profilePic) {
+            updatePayload["profilePic"] = user.profilePic;
         }
         await this.userStore.doc(userId).update(updatePayload);
     }

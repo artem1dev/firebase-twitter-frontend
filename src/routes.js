@@ -20,6 +20,7 @@ const routes = {
     getPhoto: (name) => [apiUrl, "avatars", name].join("/"),
     createPostLike: (id) => [apiUrl, "post", id, "like"].join("/"),
     createCommentLike: (id) => [apiUrl, "comment", id, "like"].join("/"),
+    uploadPhoto: () => [apiUrl, "user", "avatar"].join("/"),
 };
 
 export default routes;

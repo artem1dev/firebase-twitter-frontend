@@ -5,11 +5,13 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
 import * as admin from "firebase-admin";
+import { storage } from "firebase-admin";
 import { App } from "firebase-admin/app";
 import { Auth, getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
+import "firebase/compat/storage";
 
 @Injectable()
 export class FirebaseService {
@@ -21,6 +23,7 @@ export class FirebaseService {
             this.app = admin.initializeApp({
                 credential: admin.credential.cert(process.env.SERVICE_ACCOUNT_PATH),
                 databaseURL: `https://${process.env.PROJECT_ID}.firebaseio.com`,
+                storageBucket: process.env.BUCKET_NAME,
             });
         } else {
             this.app = admin.apps[0];
@@ -46,6 +49,10 @@ export class FirebaseService {
 
     getFirestore() {
         return getFirestore();
+    }
+
+    getStorage() {
+        return storage(this.app);
     }
 
     async verifyToken(idToken) {
