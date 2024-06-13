@@ -49,22 +49,24 @@ export class UserRepository {
     }
 
     async update(userId: string, user: UpdateUser): Promise<void> {
-        const userRef = await this.userStore.doc(userId);
-        const userSnapshot = await userRef.get();
-        if (!userSnapshot.exists) {
-            throw new NotFoundException("User not found");
-        }
+        const userRef = this.userStore.doc(userId);
+
+        // Build update payload dynamically
         const updatePayload: { [key: string]: any } = {};
-        if (user.name) {
-            updatePayload["name"] = user.name;
+        Object.keys(user).forEach((key) => {
+            if (user[key] !== undefined) {
+                updatePayload[key] = user[key];
+            }
+        });
+
+        try {
+            await userRef.update(updatePayload);
+        } catch (error) {
+            if (error.code === "not-found") {
+                throw new NotFoundException("User not found");
+            }
+            throw error;
         }
-        if (user.lastname) {
-            updatePayload["lastname"] = user.lastname;
-        }
-        if (user.profilePic) {
-            updatePayload["profilePic"] = user.profilePic;
-        }
-        await this.userStore.doc(userId).update(updatePayload);
     }
 
     async delete(userId: string): Promise<void> {

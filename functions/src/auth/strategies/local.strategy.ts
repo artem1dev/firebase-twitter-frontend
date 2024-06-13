@@ -5,8 +5,6 @@ import { AuthService } from "../auth.service";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "local") {
-    private readonly logger = new Logger(LocalStrategy.name);
-
     constructor(private readonly authService: AuthService) {
         super();
     }
@@ -17,8 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "local") {
             password,
         });
         if (!user) {
-            this.logger.debug(`Invalid credentials for user`);
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("Invalid credentials");
         }
         return user;
     }

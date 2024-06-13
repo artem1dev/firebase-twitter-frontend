@@ -27,7 +27,6 @@ export class AuthController {
     @Post("/loginByGoogle")
     @HttpCode(HttpStatus.OK)
     async loginByGoogle(@Body() loginDto: loginByGoogleDto, @Headers("authorization") token: string) {
-        console.log(loginDto);
         return await this.authService.signInByGoogle({ ...loginDto, token: token });
     }
 }

@@ -45,7 +45,7 @@ export class AuthService {
         try {
             const user = await this.firebaseService.signInWithEmailAndPassword(createAuthDto);
             if (!user) {
-                return "invalid creds";
+                throw new UnauthorizedException("Invalid credentials");
             }
             return {
                 userId: user.uid,

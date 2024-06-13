@@ -4,6 +4,7 @@ import { FirebaseService } from "src/firebase/firebase.service";
 import { CreatePost } from "./interfaces/create-post.interface";
 import { UpdatePost } from "./interfaces/update-post.interface";
 import { CreatePostLike } from "./interfaces/create-post-like.interface";
+import { DocumentData, QueryDocumentSnapshot } from "@google-cloud/firestore";
 
 @Injectable()
 export class PostRepository {
@@ -14,20 +15,50 @@ export class PostRepository {
         this.firestore = firebaseService.getFirestore();
         this.postStore = this.firestore.collection("posts");
     }
+    private async getLastDocumentOfPreviousPage(
+        page: any,
+        limit: any,
+        query: FirebaseFirestore.Query<DocumentData>,
+    ): Promise<QueryDocumentSnapshot<DocumentData> | null> {
+        const offset = (page - 1) * limit - 1; // Position of the last document of the previous page
+        const lastPage = await query.limit(offset).get();
+        return lastPage.docs[lastPage.docs.length - 1] || null;
+    }
+
+    private async getTotalDocumentCount(): Promise<number> {
+        // Potentially cache this value as it can be expensive to compute
+        const result = await this.postStore.get();
+        return result.size;
+    }
 
     async getAll({
         page,
         limit,
     }): Promise<{ data: FirebaseFirestore.DocumentData[]; totalPages: number; currentPage: number }> {
-        const allDocsSnapshot = await this.postStore.orderBy("createdAt", "desc").get();
-        const totalDocuments = allDocsSnapshot.size;
+        // Starting query to fetch the posts
+        let query = this.postStore.orderBy("createdAt", "desc");
+
+        if (page > 1) {
+            const lastDoc = await this.getLastDocumentOfPreviousPage(page, limit, query);
+            if (lastDoc) {
+                query = query.startAfter(lastDoc);
+            }
+        }
+
+        const snapshot = await query.limit(Number(limit)).get();
+
+        if (snapshot.empty) {
+            return { data: [], totalPages: 0, currentPage: page };
+        }
+
+        const totalDocuments = await this.getTotalDocumentCount();
         const totalPages = Math.ceil(totalDocuments / limit);
-        const offset = (page - 1) * limit;
-        // Use the documents already fetched to slice out the page data
-        const data = allDocsSnapshot.docs.slice(offset, offset + limit).map((doc) => ({
+
+        const data = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
         }));
+
         return {
             data,
             totalPages,

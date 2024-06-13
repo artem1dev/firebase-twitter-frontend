@@ -37,7 +37,7 @@ export default function Profile() {
                     console.error("Error fetching image:", error);
                 });
         });
-    }, []);
+    }, [, id]);
 
     const [editUserName, setEditDataName] = useState("");
     const [editUserLastName, setEditDataLastName] = useState("");
@@ -53,7 +53,7 @@ export default function Profile() {
 
     const editProfile = async (values) => {
         setEdit(false);
-        window.location.reload(false);
+        // window.location.reload(false);
         await axios.put(
             routes.updateUserById(id),
             {

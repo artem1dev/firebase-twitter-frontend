@@ -8,6 +8,7 @@ import routes from "../routes.js";
 import Context from "../context/Context.js";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase-config.js";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const validationAuth = yup.object({
     email: yup.string().required("Cannot be blank").trim().email("Email must be a valid"),
@@ -25,6 +26,21 @@ export default function Auth() {
     const handleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+            const db = getFirestore();
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+            const parts = user.displayName.split(" ");
+            if (!docSnap.exists()) {
+                await setDoc(userRef, {
+                    userId: user.uid,
+                    email: user.email,
+                    profilePic: "default.png",
+                    name: parts[0],
+                    lastname: parts[1],
+                    createdAt: new Date(),
+                });
+            }
             const response = await axios.post(
                 routes.authByGooglePath(),
                 {

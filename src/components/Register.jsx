@@ -37,6 +37,7 @@ export default function Register() {
                 await setDoc(userRef, {
                     userId: user.uid,
                     email: user.email,
+                    profilePic: "default.png",
                     name: parts[0],
                     lastname: parts[1],
                     createdAt: new Date(),
